@@ -1,142 +1,95 @@
 <template>
   <v-container>
-    <v-layout
-      text-center
-      wrap
-    >
-      <v-flex xs12>
-        <v-img
-          :src="require('../assets/logo.svg')"
-          class="my-3"
-          contain
-          height="200"
-        ></v-img>
-      </v-flex>
+    <v-row>
+      <v-col cols="12" md="4">
+        <v-card width="400" class="mx-auto mt-5">
+          <v-card-title>
+            <h1 class="display-1">{{ title }}</h1>
+          </v-card-title>
+          <v-card-text>
+            <v-form>
+              <v-text-field v-model="name" label="Username" prepend-icon="mdi-account" />
+              <v-text-field
+                v-model="password"
+                :type="showPassword ? 'text' : 'password'"
+                label="Password"
+                prepend-icon="mdi-lock"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+              />
+            </v-form>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn color="success" @click="addElement">Register</v-btn>
+            <v-btn color="info">Login</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
 
-      <v-flex mb-4>
-        <h1 class="display-2 font-weight-bold mb-3">
-          Welcome to Vuetify
-        </h1>
-        <p class="subheading font-weight-regular">
-          For help and collaboration with other Vuetify developers,
-          <br>please join our online
-          <a href="https://community.vuetifyjs.com" target="_blank">Discord Community</a>
-        </p>
-      </v-flex>
+      <v-col cols="12" md="4">
+        <v-card class="mx-auto mt-5" max-width="400" tile>
+          <v-list-item two-line v-for="(friend, index) in friends" :key="friend.index">
+            <v-list-item-content>
+              <v-list-item-title>{{ friend.name }}</v-list-item-title>
+              <v-btn color="red darken-2" @click="rmElement(index)">Supprimer</v-btn>
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>
 
-      <v-flex
-        mb-5
-        xs12
-      >
-        <h2 class="headline font-weight-bold mb-3">What's next?</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(next, i) in whatsNext"
-            :key="i"
-            :href="next.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ next.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-
-      <v-flex
-        xs12
-        mb-5
-      >
-        <h2 class="headline font-weight-bold mb-3">Important Links</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(link, i) in importantLinks"
-            :key="i"
-            :href="link.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ link.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-
-      <v-flex
-        xs12
-        mb-5
-      >
-        <h2 class="headline font-weight-bold mb-3">Ecosystem</h2>
-
-        <v-layout justify-center>
-          <a
-            v-for="(eco, i) in ecosystem"
-            :key="i"
-            :href="eco.href"
-            class="subheading mx-3"
-            target="_blank"
-          >
-            {{ eco.text }}
-          </a>
-        </v-layout>
-      </v-flex>
-    </v-layout>
+      <v-col cols="12" md="4" style="height: 500px; width: 500px">
+        <l-map :zoom="zoom" :center="center">
+          <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+        </l-map>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
+import { LMap, LTileLayer } from 'vue2-leaflet'
+
 export default {
-  data: () => ({
-    ecosystem: [
-      {
-        text: 'vuetify-loader',
-        href: 'https://github.com/vuetifyjs/vuetify-loader',
-      },
-      {
-        text: 'github',
-        href: 'https://github.com/vuetifyjs/vuetify',
-      },
-      {
-        text: 'awesome-vuetify',
-        href: 'https://github.com/vuetifyjs/awesome-vuetify',
-      },
-    ],
-    importantLinks: [
-      {
-        text: 'Documentation',
-        href: 'https://vuetifyjs.com',
-      },
-      {
-        text: 'Chat',
-        href: 'https://community.vuetifyjs.com',
-      },
-      {
-        text: 'Made with Vuetify',
-        href: 'https://madewithvuejs.com/vuetify',
-      },
-      {
-        text: 'Twitter',
-        href: 'https://twitter.com/vuetifyjs',
-      },
-      {
-        text: 'Articles',
-        href: 'https://medium.com/vuetify',
-      },
-    ],
-    whatsNext: [
-      {
-        text: 'Explore components',
-        href: 'https://vuetifyjs.com/components/api-explorer',
-      },
-      {
-        text: 'Select a layout',
-        href: 'https://vuetifyjs.com/layout/pre-defined',
-      },
-      {
-        text: 'Frequently Asked Questions',
-        href: 'https://vuetifyjs.com/getting-started/frequently-asked-questions',
-      },
-    ],
-  }),
-};
+  name: 'Map',
+  components: {
+    LMap,
+    LTileLayer
+  },
+  data () {
+    return {
+      name: '',
+      password: '',
+      showPassword: false,
+      title: 'Login',
+      friends: [
+        { name: 'Marie', password: 'password' },
+        { name: 'Florian', password: 'test' },
+        { name: 'Antoine', password: '12334' },
+        { name: 'Théo', password: 'homemaison' }
+      ],
+
+      // Map
+      zoom: 13,
+      center: [51.505, -0.09],
+      url: 'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+    }
+  },
+  methods: {
+    rmElement (index) {
+      this.friends.splice(index, 1)
+    },
+    addElement () {
+      this.friends.push({ name: this.name, password: this.password })
+    }
+  }
+}
 </script>
+
+<style scoped>
+.map {
+height: 500px;
+width: 500px;
+}
+</style>
