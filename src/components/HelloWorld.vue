@@ -4,7 +4,7 @@
       <v-col cols="12" md="4">
         <v-card width="400" class="mx-auto mt-5">
           <v-card-title>
-            <h1 class="display-1">{{ title }}</h1>
+            <h1 class="display-1">{{ titleLogin }}</h1>
           </v-card-title>
           <v-card-text>
             <v-form>
@@ -21,18 +21,37 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="success" @click="addElement">Register</v-btn>
+            <v-btn color="success">Register</v-btn>
             <v-btn color="info">Login</v-btn>
           </v-card-actions>
         </v-card>
+
+        <v-card width="400" class="mx-auto mt-5">
+          <v-card-title>
+            <h1 class="display-1">{{ titleEvent }}</h1>
+          </v-card-title>
+          <v-card-text>
+            <v-form>
+              <v-text-field v-model="nameEvent" label="Évènement" prepend-icon="mdi-domain" />
+              <v-text-field v-model="description" label="Description" prepend-icon="mdi-format-list-bulleted-type"
+              />
+            </v-form>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn color="success" @click="addEvent">Register</v-btn>
+            <v-btn color="info">Login</v-btn>
+          </v-card-actions>
+        </v-card>
+
       </v-col>
 
       <v-col cols="12" md="4">
         <v-card class="mx-auto mt-5" max-width="400" tile>
-          <v-list-item two-line v-for="(friend, index) in friends" :key="friend.index">
+          <v-list-item two-line v-for="(event, index) in events" :key="index">
             <v-list-item-content>
-              <v-list-item-title>{{ friend.name }}</v-list-item-title>
-              <v-btn color="red darken-2" @click="rmElement(index)">Supprimer</v-btn>
+              <v-list-item-title>{{ event.nameEvent + ' ' + event.description }}</v-list-item-title>
+              <v-btn color="red darken-2" @click="rmEvent(index)">Supprimer</v-btn>
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -72,25 +91,31 @@ export default {
   },
   data () {
     return {
-      name: '',
-      password: '',
-      showPassword: false,
-      title: 'Login',
-      friends: [
-        { name: 'Marie', password: 'password' },
-        { name: 'Florian', password: 'test' },
-        { name: 'Antoine', password: '12334' },
-        { name: 'Théo', password: 'homemaison' }
+      // Valeurs de test
+      events: [
+        { nameEvent: 'Billard', description: 'Paris - Indiana' },
+        { nameEvent: 'Patinoire', description: 'Patinoire de Paris' },
+        { nameEvent: 'BK', description: 'Orsay - Burger King' }
       ],
 
+      nameEvent: '',
+      description: '',
+
+      name: '',
+      password: '',
+
+      showPassword: false,
+      titleLogin: 'Login',
+      titleEvent: 'Ajouter un évènement',
+
       // Map
-      zoom: 13,
+      zoom: 15,
       nomsMap: ['Open Street Map', 'ArcGIS Online', 'HeiGIT', 'Wikimédia'],
       URLMap: ['http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
         'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         'https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png',
         'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png'],
-      center: [51.505, -0.09],
+      center: [48.973526, 2.201292],
       url:
         'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
       attribution:
@@ -98,11 +123,11 @@ export default {
     }
   },
   methods: {
-    rmElement (index) {
-      this.friends.splice(index, 1)
+    rmEvent (index) {
+      this.events.splice(index, 1)
     },
-    addElement () {
-      this.friends.push({ name: this.name, password: this.password })
+    addEvent () {
+      this.events.push({ nameEvent: this.nameEvent, description: this.description })
     },
     showMap (n) {
       this.url = this.URLMap[n]
