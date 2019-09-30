@@ -24,7 +24,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" md="4" style="height: 400px; width: 400px">
+      <v-col cols="12" md="4" >
         <div class="map">
           <l-map :zoom="zoom" :center="center">
             <l-tile-layer :url="url"></l-tile-layer>
@@ -171,6 +171,6 @@ export default {
 <style scoped>
 .map {
   height: 450px;
-  width: 450px;
+  width: 600px;
 }
 </style>
