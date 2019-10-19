@@ -70,7 +70,7 @@ export default {
           subtitle:
             "<span class='text--primary'>" +
             'Théo M.' +
-            "</span> &mdash; J'ai répétion de musique (basse). Si quelqu'un veut venir ...",
+            "</span> &mdash; J'ai répétition de musique (basse). Si quelqu'un veut venir ...",
           place: [48.6634, 2.351319999999987]
         },
         { divider: true, inset: true },
