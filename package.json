@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "leaflet": "^1.5.1",
+    "mysql": "^2.17.1",
     "vue": "^2.6.10",
     "vue2-leaflet": "^2.2.1",
     "vuetify": "^2.0.0"
