@@ -10,6 +10,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
+var db = require('./db')
 
 const app = express()
 
@@ -23,6 +24,12 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cors())
 
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  next()
+})
+
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'dist/')))
 
@@ -30,6 +37,10 @@ const users = [{
   username: 'admin',
   password: 'admin'
 }]
+
+app.get('/api', function (req, res) {
+  res.json({ status: 'Working' })
+})
 
 app.post('/api/login', (req, res) => {
   console.log('req.body', req.body)
@@ -65,6 +76,17 @@ app.get('/api/logout', (req, res) => {
       message: 'you are now disconnected'
     })
   }
+})
+
+// CORS BLOQUE LES REQUETES ICI
+app.get('/events', function (req, res) {
+  db.pool.getConnection(function (err, connection) {
+    if (err) throw err
+    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN UTILISATEUR', function (err, results, fields) {
+      if (err) console.log('Error request events')
+      res.json(results)
+    })
+  })
 })
 
 const port = process.env.PORT || 4000

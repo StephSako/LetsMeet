@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql-letsmeet.alwaysdata.net
--- Generation Time: Oct 19, 2019 at 06:04 PM
+-- Generation Time: Oct 20, 2019 at 05:38 PM
 -- Server version: 10.3.17-MariaDB
 -- PHP Version: 7.2.9
 
@@ -34,15 +34,15 @@ CREATE TABLE `EVENEMENT` (
   `Resume` text DEFAULT NULL,
   `DateEvenement` datetime DEFAULT NULL,
   `Adresse` varchar(200) DEFAULT NULL,
-  `Longitude` float DEFAULT NULL,
-  `Latitude` float DEFAULT NULL
+  `Latitude` float DEFAULT NULL,
+  `Longitude` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `EVENEMENT`
 --
 
-INSERT INTO `EVENEMENT` (`Id`, `Titre`, `Resume`, `DateEvenement`, `Adresse`, `Longitude`, `Latitude`) VALUES
+INSERT INTO `EVENEMENT` (`Id`, `Titre`, `Resume`, `DateEvenement`, `Adresse`, `Latitude`, `Longitude`) VALUES
 (1, 'Répétition de basse', 'J\'ai répétition de musique (basse). Si quelqu\'un veut venir ...', '2019-10-24 00:00:00', 'Morsang-sur-Orges', 48.6634, 2.35132),
 (2, 'Rediff ZEvent', 'Je regarderai la rediff du ZEvent dans la salle TV. Venez c\'est peace.', '2019-02-15 00:00:00', 'Argenteuil', 48.9494, 2.23835),
 (3, 'Billard', 'Billard à Indiana Club 100% compet les pélos !', '2019-09-24 00:00:00', 'Ivry-sur-Seine', 48.8282, 2.37934),

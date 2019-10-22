@@ -54,6 +54,7 @@ import { Icon } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import VGeosearch from 'vue2-leaflet-geosearch'
+import axios from 'axios'
 
 // this part resolve an issue where the markers would not appear
 delete Icon.Default.prototype._getIconUrl
@@ -183,6 +184,12 @@ export default {
       this.marker = place
       this.center = place
     }
+  },
+  mounted () {
+    var headers = { 'Content-Type': 'application/json' }
+    axios.get('http://localhost:4000/events', { headers: headers }).then(function (response) {
+      console.log(response)
+    })
   }
 }
 </script>
