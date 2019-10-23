@@ -10,6 +10,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
+const bcrypt = require('bcrypt')
 var db = require('./db')
 
 const app = express()
@@ -23,6 +24,8 @@ app.use(session({
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cors())
+
+var login = {}
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -84,6 +87,35 @@ app.get('/events', function (req, res) {
     connection.query('SELECT * FROM EVENEMENT NATURAL JOIN UTILISATEUR', function (err, results, fields) {
       if (err) console.log('Error request events')
       res.json(results)
+    })
+  })
+})
+
+app.post('/connexion', function (req, res) {
+  var input = req.body
+  var email = input.email
+  var password = input.password
+
+  db.pool.getConnection(function (err, connection) {
+    if (err) throw err
+    connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
+      if (error) throw error
+      if (results.length > 0) {
+        login[results[0].id] = req.session.id
+        req.session.key = results[0].id
+        if (bcrypt.compareSync(password, results[0].Password)) {
+          req.session.Id = results[0].Id
+          req.session.Email = results[0].Email
+          req.session.Nom = results[0].Nom
+          req.session.Prenom = results[0].Prenom
+          req.session.ImageProfil = results[0].ImageProfil
+          res.json({ auth: 'success', admin: results[0].Id })
+        } else {
+          res.json({ auth: 'failed', error: 'Mot de passe incorrect' })
+        }
+      } else {
+        res.json({ auth: 'failed', error: 'Email incorrect' })
+      }
     })
   })
 })
