@@ -1,34 +1,32 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-app-bar>
+      <v-toolbar dense>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-    <v-content>
-      <HelloWorld/>
-    </v-content>
+      <v-toolbar-title><router-link to="/">Let's Meet</router-link></v-toolbar-title>
+
+      <div class="flex-grow-1"></div>
+
+      <v-btn icon>
+        <router-link to="/connexion"><v-icon>mdi-account-plus-outline</v-icon></router-link>
+      </v-btn>
+
+      <v-btn icon>
+        <router-link to="/inscription"><v-icon>mdi-account-multiple-plus-outline</v-icon></router-link>
+      </v-btn>
+
+      <v-btn icon>
+        <router-link to="/connexion"><v-icon>mdi-account-circle</v-icon></router-link>
+      </v-btn>
+
+    </v-toolbar>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data: () => ({
     //
   })

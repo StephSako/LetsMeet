@@ -58,11 +58,10 @@
 
         <v-radio-group>
             <v-radio
-                v-for="(url,n) in nomsMap"
-                v-model=""
+                v-for="n in 4"
                 :key="n"
                 :label="nomsMap[n-1]"
-                :value="url"
+                :value="URLMap[n-1]"
                 :checked="URLMap[n-1] === url ? 'true' : 'false'"
                 @change="showMap(n-1)"
             ></v-radio>
@@ -112,11 +111,10 @@ export default {
       // Map
       zoom: 15,
       nomsMap: ['Open Street Map', 'ArcGIS Online', 'HeiGIT', 'Wikimédia'],
-      URLMap: [
-          {'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', 'Open Street Map'},
-          {'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 'ArcGIS Online'},
-          {'https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png', 'HeiGIT'},
-          {'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png'], 'Wikimédia',
+      URLMap: ['http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        'https://maps.heigit.org/openmapsurfer/tiles/roads/webmercator/{z}/{x}/{y}.png',
+        'https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png'],
       center: [48.973526, 2.201292],
       url:
         'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
@@ -147,3 +145,4 @@ export default {
   width: 450px;
 }
 </style>
+
