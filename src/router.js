@@ -24,8 +24,7 @@ export default new Router({
       path: '/inscription',
       name: 'inscription',
       component: Inscription
-    }
-    ,
+    },
     {
       path: '/moncompte',
       name: 'moncompte',

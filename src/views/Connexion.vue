@@ -5,7 +5,7 @@
                 <h1 class="display-1">Connexion</h1>
             </v-card-title>
             <v-card-text>
-                <v-form>
+                <v-form ref="form">
                     <v-text-field
                     label="Email"
                     v-model="email"
@@ -22,7 +22,7 @@
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-                <v-btn rounded color="success" flat>Connexion</v-btn>
+                <v-btn rounded color="success" @click="submit"><router-link to="/connexion">Connexion</router-link></v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="info"><router-link to="/inscription">Inscription</router-link></v-btn>
             </v-card-actions>
@@ -34,7 +34,6 @@
 import axios from 'axios'
 import Vue from 'vue'
 import VueSession from 'vue-session'
-import Dialog from '../components/Dialogue'
 Vue.use(VueSession)
 
 export default {
@@ -48,11 +47,11 @@ export default {
     submit () {
       var self = this
       if (this.$refs.form.validate()) {
-        console.log(this.pseudo)
-        console.log(this.pass)
+        console.log(this.email)
+        console.log(this.password)
         var data = {
-          pseudo: this.pseudo,
-          password: this.pass
+          email: this.email,
+          password: this.password
         }
         var headers = {
           'Content-Type': 'application/json'
@@ -61,20 +60,9 @@ export default {
           headers: headers
         }).then(function (response) {
           console.log(response.data.auth)
-          if (response.data.auth == 'failed') {
-            self.$refs.dialoginfo.setMessage(response.data.error)
-            self.$refs.dialoginfo.setHeading('Authentification')
-            self.$refs.dialoginfo.toggle()
-          } else {
-            var tmp = false;
-            if(response.data.admin == 1) {
-              tmp = true
-              self.$store.commit('change', tmp)
-              
-            }
-            console.log(tmp)
+          if (response.data.auth !== 'failed') {
             self.$session.start()
-            self.$session.set('pseudo', self.pseudo)
+            self.$session.set('email', self.email)
             self.$router.push('/')
           }
         }).catch(function (error) {

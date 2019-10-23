@@ -10,7 +10,6 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const session = require('express-session')
-const bcrypt = require('bcrypt')
 var db = require('./db')
 
 const app = express()
@@ -67,7 +66,7 @@ app.post('/api/login', (req, res) => {
   }
 })
 
-app.get('/api/logout', (req, res) => {
+app.get('/logout', (req, res) => {
   if (!req.session.userId) {
     res.status(401)
     res.json({
@@ -103,7 +102,8 @@ app.post('/connexion', function (req, res) {
       if (results.length > 0) {
         login[results[0].id] = req.session.id
         req.session.key = results[0].id
-        if (bcrypt.compareSync(password, results[0].Password)) {
+        console.log(results[0])
+        if (password === results[0].Password) {
           req.session.Id = results[0].Id
           req.session.Email = results[0].Email
           req.session.Nom = results[0].Nom

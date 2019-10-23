@@ -8,11 +8,11 @@
       <div class="flex-grow-1"></div>
 
       <v-btn icon>
-        <router-link to="/connexion"><v-icon>mdi-account-plus-outline</v-icon></router-link>
+        <router-link to="/connexion"><v-icon>mdi-account-arrow-right-outline</v-icon></router-link>
       </v-btn>
 
       <v-btn icon>
-        <router-link to="/inscription"><v-icon>mdi-account-multiple-plus-outline</v-icon></router-link>
+        <router-link to="/inscription"><v-icon>mdi-account-plus-outline</v-icon></router-link>
       </v-btn>
 
       <v-btn icon>
