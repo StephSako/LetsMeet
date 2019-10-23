@@ -78,7 +78,6 @@ app.get('/api/logout', (req, res) => {
   }
 })
 
-// CORS BLOQUE LES REQUETES ICI
 app.get('/events', function (req, res) {
   db.pool.getConnection(function (err, connection) {
     if (err) throw err
