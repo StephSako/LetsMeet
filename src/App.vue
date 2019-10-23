@@ -3,7 +3,7 @@
       <v-toolbar dense>
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Let's Meet</v-toolbar-title>
+      <v-toolbar-title><router-link to="/">Let's Meet</router-link></v-toolbar-title>
 
       <div class="flex-grow-1"></div>
 
@@ -12,11 +12,11 @@
       </v-btn>
 
       <v-btn icon>
-        <v-icon>mdi-account-multiple-plus-outline</v-icon>
+        <router-link to="/inscription"><v-icon>mdi-account-multiple-plus-outline</v-icon></router-link>
       </v-btn>
 
       <v-btn icon>
-        <v-icon>mdi-account-circle</v-icon>
+        <router-link to="/connexion"><v-icon>mdi-account-circle</v-icon></router-link>
       </v-btn>
 
     </v-toolbar>
