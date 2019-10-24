@@ -44,7 +44,7 @@
       </v-flex>
     </v-row>
     <v-row justify="center">
-      <v-btn depressed large color="primary" class="ma-5">Sauvegarder</v-btn>
+      <v-btn depressed large color="primary" class="ma-5">Mettre à jour</v-btn>
     </v-row>
   </v-container>
 </template>

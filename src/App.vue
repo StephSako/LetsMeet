@@ -14,12 +14,12 @@
         <router-link to="/inscription"><v-icon>mdi-account-plus-outline</v-icon></router-link>
       </v-btn>
 
-      <v-btn text v-if="this.$session.exists()" @click="logout">
-        <router-link to="/logout"><v-icon>mdi-account-off-outline</v-icon></router-link>
-      </v-btn>
-
       <v-btn text v-if="this.$session.exists()">
         <router-link to="/compte"><v-icon>mdi-account-circle</v-icon></router-link>
+      </v-btn>
+
+      <v-btn text v-if="this.$session.exists()" @click="logout">
+        <router-link to="/logout"><v-icon>mdi-account-off-outline</v-icon></router-link>
       </v-btn>
 
     </v-toolbar>
