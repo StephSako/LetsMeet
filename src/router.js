@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Connexion from './views/Connexion.vue'
 import Inscription from './views/Inscription.vue'
-import MonCompte from './views/Account.vue'
+import Account from './views/Account.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -28,7 +28,7 @@ export default new Router({
     {
       path: '/compte',
       name: 'compte',
-      component: MonCompte
+      component: Account
     }
   ]
 })

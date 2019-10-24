@@ -24,8 +24,6 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cors())
 
-var login = {}
-
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -98,17 +96,29 @@ app.post('/connexion', function (req, res) {
     connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
       if (error) throw error
       if (results.length > 0) {
-        login[results[0].id] = req.session.id
-        req.session.key = results[0].id
+        req.session.key = results[0].Id
         if (password === results[0].Password) {
-          req.session.Id = results[0].Id
-          req.session.Email = results[0].Email
-          req.session.Nom = results[0].Nom
-          req.session.Prenom = results[0].Prenom
-          req.session.ImageProfil = results[0].ImageProfil
-          res.json({ auth: 'success', admin: results[0].Id })
+          req.session.id = results[0].Id
+          req.session.email = results[0].Email
+          req.session.nom = results[0].Nom
+          req.session.prenom = results[0].Prenom
+          req.session.imageProfil = results[0].ImageProfil
+          res.json(
+            {
+              auth: 'success',
+              id: req.session.id,
+              prenom: req.session.prenom,
+              nom: req.session.nom,
+              imageProfil: req.session.imageProfil
+            }
+          )
         } else {
-          res.json({ auth: 'failed', error: 'Mot de passe incorrect' })
+          res.json(
+            {
+              auth: 'failed',
+              error: 'Mot de passe incorrect'
+            }
+          )
         }
       } else {
         res.json({ auth: 'failed', error: 'Email incorrect' })

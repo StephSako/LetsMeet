@@ -41,14 +41,15 @@ export default {
   data: () => ({
     showPassword: false,
     email: '',
+    prenom: '',
+    nom: '',
+    imageProfil: '',
     password: ''
   }),
   methods: {
     submit () {
       var self = this
       if (this.$refs.form.validate()) {
-        console.log(this.email)
-        console.log(this.password)
         var data = {
           email: this.email,
           password: this.password
@@ -59,10 +60,15 @@ export default {
         axios.post('http://localhost:4000/connexion', data, {
           headers: headers
         }).then(function (response) {
-          console.log(response.data.auth)
           if (response.data.auth !== 'failed') {
+            console.log(self.email)
+            console.log(self.prenom)
+            console.log(self.nom)
             self.$session.start()
             self.$session.set('email', self.email)
+            self.$session.set('prenom', response.data.prenom)
+            self.$session.set('nom', response.data.nom)
+            self.$session.set('imageProfil', response.data.imageProfil)
             self.$router.push('/')
           }
         }).catch(function (error) {
