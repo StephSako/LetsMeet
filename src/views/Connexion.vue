@@ -6,10 +6,12 @@
             </v-card-title>
             <v-card-text>
                 <v-form ref="form">
+
                     <v-text-field
                     label="Email"
                     v-model="email"
                     prepend-icon="mdi-account-circle"/>
+
                     <v-text-field
                     v-model="password"
                     :type="showPassword ? 'text' : 'password'"
@@ -18,6 +20,7 @@
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPassword=!showPassword"
                     />
+                    
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
@@ -61,9 +64,6 @@ export default {
           headers: headers
         }).then(function (response) {
           if (response.data.auth !== 'failed') {
-            console.log(self.email)
-            console.log(self.prenom)
-            console.log(self.nom)
             self.$session.start()
             self.$session.set('email', self.email)
             self.$session.set('prenom', response.data.prenom)

@@ -88,9 +88,6 @@ export default {
   },
   mounted () {
     if (this.$session.exists()) {
-      console.log(this.$session.get('email'))
-      console.log(this.$session.get('prenom'))
-      console.log(this.$session.get('nom'))
       this.email = this.$session.get('email')
       this.prenom = this.$session.get('prenom')
       this.nom = this.$session.get('nom')
