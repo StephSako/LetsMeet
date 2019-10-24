@@ -140,3 +140,4 @@ export default {
   width: 450px;
 }
 </style>
+
