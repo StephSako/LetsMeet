@@ -82,7 +82,6 @@
 
 <script>
 import { LMap, LTileLayer } from 'vue2-leaflet'
-
 export default {
   name: 'Map',
   components: {
@@ -97,17 +96,13 @@ export default {
         { nameEvent: 'Patinoire', description: 'Patinoire de Paris' },
         { nameEvent: 'BK', description: 'Orsay - Burger King' }
       ],
-
       nameEvent: '',
       description: '',
-
       name: '',
       password: '',
-
       showPassword: false,
       titleLogin: 'Login',
       titleEvent: 'Ajouter un évènement',
-
       // Map
       zoom: 15,
       nomsMap: ['Open Street Map', 'ArcGIS Online', 'HeiGIT', 'Wikimédia'],
