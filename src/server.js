@@ -66,16 +66,14 @@ app.post('/api/login', (req, res) => {
   }
 })
 
-app.get('/logout', (req, res) => {
-  if (!req.session.userId) {
-    res.status(401)
-    res.json({
-      message: 'you are already disconnected'
-    })
-  } else {
-    req.session.userId = 0
-    res.json({
-      message: 'you are now disconnected'
+app.get('/logout', (req, res, next) => {
+  if (req.session) {
+    req.session.destroy(function (err) {
+      if (err) {
+        return next(err)
+      } else {
+        return res.redirect('/')
+      }
     })
   }
 })
@@ -102,7 +100,6 @@ app.post('/connexion', function (req, res) {
       if (results.length > 0) {
         login[results[0].id] = req.session.id
         req.session.key = results[0].id
-        console.log(results[0])
         if (password === results[0].Password) {
           req.session.Id = results[0].Id
           req.session.Email = results[0].Email

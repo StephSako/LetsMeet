@@ -26,8 +26,8 @@ export default new Router({
       component: Inscription
     },
     {
-      path: '/moncompte',
-      name: 'moncompte',
+      path: '/compte',
+      name: 'compte',
       component: MonCompte
     }
   ]
