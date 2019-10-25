@@ -77,7 +77,7 @@ app.get('/logout', (req, res, next) => {
 })
 
 app.get('/events', function (req, res) {
-  db.pool.getConnection(function (err, connection) {
+  db.database.getConnection(function (err, connection) {
     if (err) throw err
     connection.query('SELECT * FROM EVENEMENT NATURAL JOIN UTILISATEUR', function (err, results, fields) {
       if (err) console.log('Error request events')
@@ -91,7 +91,7 @@ app.post('/connexion', function (req, res) {
   var email = input.email
   var password = input.password
 
-  db.pool.getConnection(function (err, connection) {
+  db.database.getConnection(function (err, connection) {
     if (err) throw err
     connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
       if (error) throw error
@@ -122,6 +122,54 @@ app.post('/connexion', function (req, res) {
         }
       } else {
         res.json({ auth: 'failed', error: 'Email incorrect' })
+      }
+    })
+  })
+})
+
+app.post('/inscription', function (req, res) {
+  var input = req.body
+  var email = input.email
+  var password = input.password
+  var prenom = input.prenom
+  var nom = input.nom
+  var imageProfil = input.imageProfil
+
+  db.database.getConnection(function (err, connection) {
+    if (err) throw err
+
+    var utilisateur = {
+      Email: email,
+      Password: password,
+      Prenom: prenom,
+      Nom: nom,
+      ImageProfil: imageProfil
+    }
+
+    connection.query('INSERT INTO UTILISATEUR SET ?', utilisateur, function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'L\'inscription a échoué'
+          }
+        )
+      } else {
+        req.session.key = results.insertId
+        req.session.id = results.insertId
+        req.session.email = email
+        req.session.nom = nom
+        req.session.prenom = prenom
+        req.session.imageProfil = imageProfil
+        res.json(
+          {
+            auth: 'success',
+            id: req.session.id,
+            prenom: req.session.prenom,
+            nom: req.session.nom,
+            imageProfil: req.session.imageProfil
+          }
+        )
       }
     })
   })

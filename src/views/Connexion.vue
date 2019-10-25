@@ -20,12 +20,11 @@
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPassword=!showPassword"
                     />
-                    
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
-                <v-btn rounded color="success" @click="submit"><router-link to="/connexion">Connexion</router-link></v-btn>
+                <v-btn rounded color="success" @click="connexion"><router-link to="/connexion">Connexion</router-link></v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="info"><router-link to="/inscription">Inscription</router-link></v-btn>
             </v-card-actions>
@@ -50,7 +49,7 @@ export default {
     password: ''
   }),
   methods: {
-    submit () {
+    connexion () {
       var self = this
       if (this.$refs.form.validate()) {
         var data = {

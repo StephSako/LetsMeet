@@ -7,11 +7,11 @@
 
       <div class="flex-grow-1"></div>
 
-      <v-chip v-model="prenom" v-if="this.$session.exists()">
+      <v-chip v-if="this.$session.exists()">
         <router-link to="/compte">
           <v-avatar left>
             <v-img :src="imageProfil"></v-img>
-          </v-avatar>{{prenom}}
+          </v-avatar>{{prenom + ' ' + nom}}
         </router-link>
       </v-chip>
 
@@ -45,7 +45,7 @@ export default {
   data () {
     return {
       prenom: this.$session.get('prenom'),
-      nom: this.$session.get('prenom'),
+      nom: this.$session.get('nom'),
       imageProfil: this.$session.get('imageProfil')
     }
   },
