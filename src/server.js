@@ -24,8 +24,6 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(cors())
 
-var login = {}
-
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -79,7 +77,7 @@ app.get('/logout', (req, res, next) => {
 })
 
 app.get('/events', function (req, res) {
-  db.pool.getConnection(function (err, connection) {
+  db.database.getConnection(function (err, connection) {
     if (err) throw err
     connection.query('SELECT * FROM EVENEMENT NATURAL JOIN UTILISATEUR', function (err, results, fields) {
       if (err) console.log('Error request events')
@@ -93,25 +91,85 @@ app.post('/connexion', function (req, res) {
   var email = input.email
   var password = input.password
 
-  db.pool.getConnection(function (err, connection) {
+  db.database.getConnection(function (err, connection) {
     if (err) throw err
     connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
       if (error) throw error
       if (results.length > 0) {
-        login[results[0].id] = req.session.id
-        req.session.key = results[0].id
+        req.session.key = results[0].Id
         if (password === results[0].Password) {
-          req.session.Id = results[0].Id
-          req.session.Email = results[0].Email
-          req.session.Nom = results[0].Nom
-          req.session.Prenom = results[0].Prenom
-          req.session.ImageProfil = results[0].ImageProfil
-          res.json({ auth: 'success', admin: results[0].Id })
+          req.session.id = results[0].Id
+          req.session.email = results[0].Email
+          req.session.nom = results[0].Nom
+          req.session.prenom = results[0].Prenom
+          req.session.imageProfil = results[0].ImageProfil
+          res.json(
+            {
+              auth: 'success',
+              id: req.session.id,
+              prenom: req.session.prenom,
+              nom: req.session.nom,
+              imageProfil: req.session.imageProfil
+            }
+          )
         } else {
-          res.json({ auth: 'failed', error: 'Mot de passe incorrect' })
+          res.json(
+            {
+              auth: 'failed',
+              error: 'Mot de passe incorrect'
+            }
+          )
         }
       } else {
         res.json({ auth: 'failed', error: 'Email incorrect' })
+      }
+    })
+  })
+})
+
+app.post('/inscription', function (req, res) {
+  var input = req.body
+  var email = input.email
+  var password = input.password
+  var prenom = input.prenom
+  var nom = input.nom
+  var imageProfil = input.imageProfil
+
+  db.database.getConnection(function (err, connection) {
+    if (err) throw err
+
+    var utilisateur = {
+      Email: email,
+      Password: password,
+      Prenom: prenom,
+      Nom: nom,
+      ImageProfil: imageProfil
+    }
+
+    connection.query('INSERT INTO UTILISATEUR SET ?', utilisateur, function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'L\'inscription a échoué'
+          }
+        )
+      } else {
+        req.session.key = results.insertId
+        req.session.id = results.insertId
+        req.session.email = email
+        req.session.nom = nom
+        req.session.prenom = prenom
+        req.session.imageProfil = imageProfil
+        res.json(
+          {
+            auth: 'success',
+            id: req.session.id,
+            prenom: req.session.prenom,
+            nom: req.session.nom,
+            imageProfil: req.session.imageProfil
+          }
+        )
       }
     })
   })

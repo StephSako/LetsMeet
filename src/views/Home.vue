@@ -53,6 +53,9 @@ import 'leaflet/dist/leaflet.css'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import VGeosearch from 'vue2-leaflet-geosearch'
 import axios from 'axios'
+import Vue from 'vue'
+import VueSession from 'vue-session'
+Vue.use(VueSession)
 
 // this part resolve an issue where the markers would not appear
 delete Icon.Default.prototype._getIconUrl

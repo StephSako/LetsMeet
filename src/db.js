@@ -1,9 +1,9 @@
 var mysql = require('mysql')
-var pool = mysql.createPool({
+var database = mysql.createPool({
   host: 'mysql-letsmeet.alwaysdata.net',
   user: 'letsmeet',
   password: 'jesuis95etgta#',
   database: 'letsmeet_letsmeet_bd'
 })
-module.exports = pool
-module.exports.pool = pool
+module.exports = database
+module.exports.database = database

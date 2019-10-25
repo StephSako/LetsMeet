@@ -1,27 +1,37 @@
 <template>
   <v-app>
-      <v-toolbar dense>
-
-      <v-toolbar-title><router-link to="/">Let's Meet</router-link></v-toolbar-title>
+    <v-toolbar dense>
+      <v-toolbar-title>
+        <router-link to="/">Let's Meet</router-link>
+      </v-toolbar-title>
 
       <div class="flex-grow-1"></div>
 
+      <v-chip v-if="this.$session.exists()">
+        <router-link to="/compte">
+          <v-avatar left>
+            <v-img :src="imageProfil"></v-img>
+          </v-avatar>{{prenom + ' ' + nom}}
+        </router-link>
+      </v-chip>
+
       <v-btn icon v-if="!this.$session.exists()">
-        <router-link to="/connexion"><v-icon>mdi-account-arrow-right-outline</v-icon></router-link>
+        <router-link to="/connexion">
+          <v-icon>mdi-account-arrow-right-outline</v-icon>
+        </router-link>
       </v-btn>
 
       <v-btn icon v-if="!this.$session.exists()">
-        <router-link to="/inscription"><v-icon>mdi-account-plus-outline</v-icon></router-link>
-      </v-btn>
-
-      <v-btn text v-if="this.$session.exists()">
-        <router-link to="/compte"><v-icon>mdi-account-circle</v-icon></router-link>
+        <router-link to="/inscription">
+          <v-icon>mdi-account-plus-outline</v-icon>
+        </router-link>
       </v-btn>
 
       <v-btn text v-if="this.$session.exists()" @click="logout">
-        <router-link to="/logout"><v-icon>mdi-account-off-outline</v-icon></router-link>
+        <router-link to="/logout">
+          <v-icon>mdi-account-remove-outline</v-icon>
+        </router-link>
       </v-btn>
-
     </v-toolbar>
     <router-view></router-view>
   </v-app>
@@ -34,22 +44,16 @@ Vue.use(VueSession)
 export default {
   data () {
     return {
-      email: ''
+      prenom: this.$session.get('prenom'),
+      nom: this.$session.get('nom'),
+      imageProfil: this.$session.get('imageProfil')
     }
   },
   methods: {
-    session_user () {
-      if (this.$session.has('email')) {
-        this.email = this.$session.get('email')
-      }
-    },
     logout () {
       this.$session.destroy()
       this.$router.push('/')
     }
-  },
-  mounted () {
-    this.session_user()
   }
 }
 </script>
