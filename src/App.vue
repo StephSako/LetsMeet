@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar dense>
+    <v-toolbar>
       <v-toolbar-title>
         <router-link to="/">Let's Meet</router-link>
       </v-toolbar-title>

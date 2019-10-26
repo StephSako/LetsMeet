@@ -8,21 +8,31 @@
           </v-toolbar>
 
           <v-list two-line>
-            <v-list-item-group multiple active-class="pink--text">
+            <v-list-item-group>
               <template v-for="(event, index) in events">
                 <v-divider :key="index" v-if="index > 0"></v-divider>
                 <v-list-item :key="event.Titre" @click="setMarker(event.Latitude, event.Longitude)">
-                  <template>
-                    <v-list-item-content>
-                      <v-list-item-title v-text="event.Titre"></v-list-item-title>
-                      <v-list-item-subtitle v-text="event.Resume"></v-list-item-subtitle>
-                    </v-list-item-content>
+                  <v-list-item-avatar>
+                    <v-img :src="event.ImageProfil"></v-img>
+                  </v-list-item-avatar>
 
-                    <v-list-item-action>
-                      <v-list-item-action-text v-text="event.DateEvenement"></v-list-item-action-text>
-                      <v-btn v-if="sessionInLive" color="info" @click="participate(event.Id)">Participer</v-btn>
-                    </v-list-item-action>
-                  </template>
+                  <v-list-item-content>
+                    <v-list-item-title class="text--primary" v-text="event.Titre"></v-list-item-title>
+                    <v-list-item-subtitle v-text="event.Prenom + ' ' + event.Nom"></v-list-item-subtitle>
+                    <v-list-item-subtitle v-text="event.Resume"></v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-list-item-action-text v-text="event.DateEvenement"></v-list-item-action-text>
+                    <v-btn
+                      v-if="sessionInLive()"
+                      color="info"
+                      @click="participate(event.Id)"
+                    >Participer</v-btn>
+                    <v-snackbar v-model="snackbar">
+                      Vous participer maintenant à '{{event.Titre}}'
+                    </v-snackbar>
+                  </v-list-item-action>
                 </v-list-item>
               </template>
             </v-list-item-group>
@@ -70,6 +80,7 @@ export default {
   data () {
     return {
       events: null,
+      snackbar: false,
 
       // Map
       zoom: 15,
@@ -85,6 +96,7 @@ export default {
     },
     participate (idEvent) {
       if (this.$session.exists()) {
+        this.snackbar = true
         var data = {
           idEvent: idEvent,
           idSession: this.$session.get('key')
@@ -92,13 +104,14 @@ export default {
         var headers = {
           'Content-Type': 'application/json'
         }
-        axios.post('http://localhost:4000/participate', data, {
-          headers: headers
-        }).then(function (response) {
-
-        }).catch(function (error) {
-          console.log(error)
-        })
+        axios
+          .post('http://localhost:4000/participate', data, {
+            headers: headers
+          })
+          .then(function (response) {})
+          .catch(function (error) {
+            console.log(error)
+          })
       }
     },
     sessionInLive () {
@@ -108,11 +121,14 @@ export default {
   mounted () {
     var headers = { 'Content-Type': 'application/json' }
     var self = this
-    axios
-      .get('http://localhost:4000/events', { headers: headers })
-      .then(function (response) {
-        self.events = response.data
-      })
+
+    if (!this.charged) {
+      axios
+        .get('http://localhost:4000/events', { headers: headers })
+        .then(function (response) {
+          self.events = response.data
+        })
+    }
   }
 }
 </script>
