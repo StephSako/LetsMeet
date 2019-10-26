@@ -46,7 +46,9 @@ export default {
     return {
       prenom: this.$session.get('prenom'),
       nom: this.$session.get('nom'),
-      imageProfil: this.$session.get('imageProfil')
+      imageProfil: this.$session.get('imageProfil'),
+      email: this.$session.get('email'),
+      id: this.$session.get('id')
     }
   },
   methods: {
