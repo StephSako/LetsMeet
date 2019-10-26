@@ -160,6 +160,66 @@ app.post('/inscription', function (req, res) {
   })
 })
 
+app.post('/add_event', function (req, res) {
+  var input = req.body
+  var titre = input.titre
+  var resume = input.resume
+  var dateEvent = input.dateEvent
+  var adresse = input.adresse
+  var latitude = input.latitude
+  var longitude = input.longitude
+  var idUser = input.idSession
+  var dateCreation = input.longitude
+
+  db.database.getConnection(function (err, connection) {
+    if (err) throw err
+
+    var event = {
+      Titre: titre,
+      Password: resume,
+      DateEvenement: dateEvent,
+      Adresse: adresse,
+      Latitude: latitude,
+      Longitude: longitude
+    }
+
+    connection.query('INSERT INTO EVENEMENT SET ?', event, function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La creation de l\'evenement a échoué'
+          }
+        )
+      } else {
+        var post = {
+          Id_EVENEMENT: results.insertId,
+          Id_UTILISATEUR: idUser,
+          DateCreation: dateCreation
+        }
+
+        connection.query('INSERT INTO POST SET ?', post, function (error, results, fields) {
+          if (error) {
+            res.json(
+              {
+                auth: 'failed',
+                error: 'Le post a échoué'
+              }
+            )
+          } else {
+            res.json(
+              {
+                auth: 'failed',
+                error: 'Le post a échoué'
+              }
+            )
+          }
+        })
+      }
+    })
+  })
+})
+
 app.post('/participate', function (req, res) {
   var input = req.body
   var idUtilisateur = input.idSession
