@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Connexion from './views/Connexion.vue'
 import Inscription from './views/Inscription.vue'
 import Account from './views/Account.vue'
+import MyEvents from './views/MyEvents.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -29,6 +30,11 @@ export default new Router({
       path: '/compte',
       name: 'compte',
       component: Account
+    },
+    {
+      path: '/my_events',
+      name: 'my_events',
+      component: MyEvents
     }
   ]
 })

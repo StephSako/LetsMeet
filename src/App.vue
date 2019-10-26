@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar>
+    <v-toolbar dense>
       <v-toolbar-title>
         <router-link to="/">Let's Meet</router-link>
       </v-toolbar-title>
@@ -14,6 +14,12 @@
           </v-avatar>{{prenom + ' ' + nom}}
         </router-link>
       </v-chip>
+
+      <v-btn text v-if="this.$session.exists()">
+        <router-link to="/my_events">
+          Mes évènements
+        </router-link>
+      </v-btn>
 
       <v-btn icon v-if="!this.$session.exists()">
         <router-link to="/connexion">
@@ -46,9 +52,7 @@ export default {
     return {
       prenom: this.$session.get('prenom'),
       nom: this.$session.get('nom'),
-      imageProfil: this.$session.get('imageProfil'),
-      email: this.$session.get('email'),
-      id: this.$session.get('id')
+      imageProfil: this.$session.get('imageProfil')
     }
   },
   methods: {

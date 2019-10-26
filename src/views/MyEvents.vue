@@ -6,18 +6,18 @@
       type="error"
       v-if="!sessionInLive()"
     >
-      Vous devez être connecté pour participer aux évènements !
+      Vous devez être connecté pour accéder à vos évènements !
     </v-alert>
-    <v-row>
+    <v-row v-if="sessionInLive()">
       <v-col cols="12" md="6">
         <v-card max-width="500" class="mx-auto">
           <v-toolbar color="blue" dark>
-            <v-toolbar-title>Tous les évènements</v-toolbar-title>
+            <v-toolbar-title>Vos évènements</v-toolbar-title>
           </v-toolbar>
 
           <v-list two-line>
             <v-list-item-group>
-              <template v-for="(event, index) in events">
+              <template v-for="(event, index) in my_events">
                 <v-divider :key="index" v-if="index > 0"></v-divider>
                 <v-list-item :key="event.Titre" @click="setMarker(event.Latitude, event.Longitude)">
                   <v-list-item-avatar>
@@ -33,12 +33,13 @@
                   <v-list-item-action>
                     <v-list-item-action-text>{{event.DateEvenement | formatDate}}</v-list-item-action-text>
                     <v-btn
-                      v-if="sessionInLive()"
-                      color="info"
-                      @click="participate(event.Id_EVENEMENT)"
-                    >Participer</v-btn>
+                      color="success"
+                      @click="modifier(event.Id_EVENEMENT)"><v-icon>mdi-pencil-outline</v-icon></v-btn>
+                      <v-btn
+                      color="error"
+                      @click="supprimer(event.Id_EVENEMENT)"><v-icon>mdi-delete</v-icon></v-btn>
                     <v-snackbar v-model="snackbar">
-                      Vous participer maintenant à cet évènement
+                      Vous participer maintenant à '{{event.Titre}}'
                     </v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
@@ -79,7 +80,7 @@ Icon.Default.mergeOptions({
 })
 
 export default {
-  name: 'Home',
+  name: 'MyEvents',
   components: {
     LMap,
     LTileLayer,
@@ -87,7 +88,7 @@ export default {
   },
   data () {
     return {
-      events: null,
+      my_events: null,
       snackbar: false,
 
       // Map
@@ -102,39 +103,34 @@ export default {
       this.marker = [latitude, longitude]
       this.center = [latitude, longitude]
     },
-    participate (idEvent) {
-      if (this.$session.exists()) {
-        this.snackbar = true
-        var data = {
-          idEvent: idEvent,
-          idSession: this.$session.get('key')
-        }
-        var headers = {
-          'Content-Type': 'application/json'
-        }
-        axios
-          .post('http://localhost:4000/participate', data, {
-            headers: headers
-          })
-          .then(function (response) {})
-          .catch(function (error) {
-            console.log(error)
-          })
-      }
-    },
     sessionInLive () {
       return this.$session.exists()
+    },
+    modifier (idEvent) {
+      console.log('modifier : ' + idEvent)
+    },
+    supprimer (idEvent) {
+      console.log('supprimer : ' + idEvent)
     }
   },
   mounted () {
     var headers = { 'Content-Type': 'application/json' }
     var self = this
 
-    axios
-      .get('http://localhost:4000/events', { headers: headers })
-      .then(function (response) {
-        self.events = response.data
-      })
+    if (this.$session.exists()) {
+      var data = { idSession: this.$session.get('key') }
+      axios
+        .post('http://localhost:4000/my_events', data, { headers: headers })
+        .then(function (response) {
+          if (response.data.auth !== 'failed') {
+            self.my_events = response.data
+          } else {
+            console.log('error')
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+    }
   }
 }
 </script>

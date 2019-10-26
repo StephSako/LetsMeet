@@ -52,8 +52,21 @@ app.get('/logout', (req, res, next) => {
 app.get('/events', function (req, res) {
   db.database.getConnection(function (err, connection) {
     if (err) throw err
-    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN UTILISATEUR', function (err, results, fields) {
+    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN POST NATURAL JOIN UTILISATEUR ORDER BY EVENEMENT.DateEvenement', function (err, results, fields) {
       if (err) console.log('Error request events')
+      res.json(results)
+    })
+  })
+})
+
+app.post('/my_events', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) throw err
+    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN POST NATURAL JOIN UTILISATEUR WHERE Id_UTILISATEUR = ? ORDER BY EVENEMENT.DateEvenement', [idUser], function (err, results, fields) {
+      if (err) console.log('Error request my_events')
       res.json(results)
     })
   })
@@ -70,7 +83,7 @@ app.post('/connexion', function (req, res) {
       if (error) throw error
       if (results.length > 0) {
         if (password === results[0].Password) {
-          req.session.key = results[0].Id
+          req.session.key = results[0].Id_UTILISATEUR
           req.session.email = results[0].Email
           req.session.nom = results[0].Nom
           req.session.prenom = results[0].Prenom
@@ -129,7 +142,6 @@ app.post('/inscription', function (req, res) {
         )
       } else {
         req.session.key = results.insertId
-        req.session.id = results.insertId
         req.session.email = email
         req.session.nom = nom
         req.session.prenom = prenom
@@ -137,7 +149,7 @@ app.post('/inscription', function (req, res) {
         res.json(
           {
             auth: 'success',
-            id: req.session.id,
+            key: req.session.key,
             prenom: req.session.prenom,
             nom: req.session.nom,
             imageProfil: req.session.imageProfil
