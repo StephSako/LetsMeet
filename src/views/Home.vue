@@ -1,5 +1,13 @@
 <template>
   <v-container>
+
+    <v-alert
+      :value="true"
+      type="error"
+      v-if="!sessionInLive()"
+    >
+      Vous devez être connecté pour participer aux évènements !
+    </v-alert>
     <v-row>
       <v-col cols="12" md="4">
         <v-card max-width="500" class="mx-auto">
