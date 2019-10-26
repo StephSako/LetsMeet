@@ -2,8 +2,9 @@
   <v-container>
 
     <v-alert
+      class="text-center"
       :value="true"
-      type="error"
+      type="warning"
       v-if="!sessionInLive()"
     >
       Vous devez être connecté pour participer aux évènements !
