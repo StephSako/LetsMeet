@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar dense>
+    <v-toolbar>
       <v-toolbar-title>
         <router-link to="/">Let's Meet</router-link>
       </v-toolbar-title>
@@ -46,7 +46,9 @@ export default {
     return {
       prenom: this.$session.get('prenom'),
       nom: this.$session.get('nom'),
-      imageProfil: this.$session.get('imageProfil')
+      imageProfil: this.$session.get('imageProfil'),
+      email: this.$session.get('email'),
+      id: this.$session.get('id')
     }
   },
   methods: {

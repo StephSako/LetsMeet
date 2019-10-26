@@ -67,6 +67,7 @@ export default {
             self.$session.set('email', self.email)
             self.$session.set('prenom', response.data.prenom)
             self.$session.set('nom', response.data.nom)
+            self.$session.set('key', response.data.key)
             self.$session.set('imageProfil', response.data.imageProfil)
             self.$router.push('/')
           }

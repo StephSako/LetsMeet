@@ -33,35 +33,8 @@ app.use(function (req, res, next) {
 const path = require('path')
 app.use(express.static(path.join(__dirname, 'dist/')))
 
-const users = [{
-  username: 'admin',
-  password: 'admin'
-}]
-
 app.get('/api', function (req, res) {
   res.json({ status: 'Working' })
-})
-
-app.post('/api/login', (req, res) => {
-  console.log('req.body', req.body)
-  console.log('req.query', req.query)
-  if (!req.session.userId) {
-    const user = users.find(u => u.username === req.body.username && u.password === req.body.password)
-    if (!user) {
-      // gérez le cas où on n'a pas trouvé d'utilisateur correspondant
-    } else {
-      // connect the user
-      req.session.userId = 1000 // connect the user, and change the id
-      res.json({
-        message: 'connected'
-      })
-    }
-  } else {
-    res.status(401)
-    res.json({
-      message: 'you are already connected'
-    })
-  }
 })
 
 app.get('/logout', (req, res, next) => {
@@ -96,9 +69,8 @@ app.post('/connexion', function (req, res) {
     connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
       if (error) throw error
       if (results.length > 0) {
-        req.session.key = results[0].Id
         if (password === results[0].Password) {
-          req.session.id = results[0].Id
+          req.session.key = results[0].Id
           req.session.email = results[0].Email
           req.session.nom = results[0].Nom
           req.session.prenom = results[0].Prenom
@@ -106,9 +78,10 @@ app.post('/connexion', function (req, res) {
           res.json(
             {
               auth: 'success',
-              id: req.session.id,
+              key: req.session.key,
               prenom: req.session.prenom,
               nom: req.session.nom,
+              email: req.session.email,
               imageProfil: req.session.imageProfil
             }
           )
@@ -168,6 +141,38 @@ app.post('/inscription', function (req, res) {
             prenom: req.session.prenom,
             nom: req.session.nom,
             imageProfil: req.session.imageProfil
+          }
+        )
+      }
+    })
+  })
+})
+
+app.post('/participate', function (req, res) {
+  var input = req.body
+  var idUtilisateur = input.idSession
+  var idEvenement = input.idEvent
+
+  db.database.getConnection(function (err, connection) {
+    if (err) throw err
+
+    var participe = {
+      Id_UTILISATEUR: idUtilisateur,
+      Id_EVENEMENT: idEvenement
+    }
+
+    connection.query('INSERT INTO PARTICIPE SET ?', participe, function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La participation a échoué'
+          }
+        )
+      } else {
+        res.json(
+          {
+            auth: 'success'
           }
         )
       }
