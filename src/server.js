@@ -330,7 +330,6 @@ app.post('/delete_event', function (req, res) {
           }
         )
       } else {
-
         connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
           connection.release()
           if (error) {
