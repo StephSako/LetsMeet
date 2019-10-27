@@ -58,7 +58,7 @@
               </v-row>
             </v-card>
           </v-flex>
-          <v-snackbar v-model="snackbar">{{text}}</v-snackbar>
+          <v-snackbar color="success" v-model="snackbar" center>{{text}}</v-snackbar>
         </v-row>
       </div>
     </v-container>
@@ -112,8 +112,13 @@ export default {
         .then(function (response) {
           console.log(response.data.auth)
           if (response.data.auth !== 'failed') {
-            self.text = 'Compte mis à jour ! Rafraichissez la page'
+            self.$session.set('email', self.editUser.email)
+            self.$session.set('prenom', self.editUser.prenom)
+            self.$session.set('nom', self.editUser.nom)
+            self.$session.set('imageProfil', self.editUser.imageProfil)
+            self.text = 'Compte mis à jour !'
             self.snackbar = true
+            console.log(self.$session.get('prenom'))
           } else {
             console.log('error')
           }
@@ -127,28 +132,10 @@ export default {
     }
   },
   mounted () {
-    var headers = { 'Content-Type': 'application/json' }
-    var self = this
-    if (this.$session.exists()) {
-      var data = {
-        idSession: this.$session.get('key')
-      }
-      axios
-        .post('http://localhost:4000/get_account', data, { headers: headers })
-        .then(function (response) {
-          if (response.data.auth !== 'failed') {
-            self.editUser.prenom = response.data.prenom
-            self.editUser.nom = response.data.nom
-            self.editUser.email = response.data.email
-            self.editUser.imageProfil = response.data.imageProfil
-          } else {
-            console.log('error')
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    }
+    this.editUser.nom = this.$session.get('nom')
+    this.editUser.prenom = this.$session.get('prenom')
+    this.editUser.email = this.$session.get('email')
+    this.editUser.imageProfil = this.$session.get('imageProfil')
   }
 }
 </script>

@@ -419,12 +419,13 @@ app.post('/delete_event', function (req, res) {
 
   db.database.getConnection(function (err, connection) {
     if (err) {
-      console.log(err.code)
+      console.log('ERROR 0 : ' + err)
       throw err
     }
 
     connection.query('DELETE FROM POST WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
       if (error) {
+        console.log('ERROR 1 : ' + error)
         res.json(
           {
             auth: 'failed',
@@ -432,21 +433,34 @@ app.post('/delete_event', function (req, res) {
           }
         )
       } else {
-        connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
-          connection.release()
+        connection.query('DELETE FROM PARTICIPE WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
           if (error) {
+            console.log('ERROR 2 : ' + error)
             res.json(
               {
                 auth: 'failed',
-                error: 'La suppression de l\'évènement a échoué'
+                error: 'La suppression de la participation a échoué'
               }
             )
           } else {
-            res.json(
-              {
-                auth: 'success'
+            connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
+              connection.release()
+              if (error) {
+                console.log('ERROR 3 : ' + error)
+                res.json(
+                  {
+                    auth: 'failed',
+                    error: 'La suppression de l\'évènement a échoué'
+                  }
+                )
+              } else {
+                res.json(
+                  {
+                    auth: 'success'
+                  }
+                )
               }
-            )
+            })
           }
         })
       }
@@ -459,8 +473,6 @@ app.post('/delete_participation', function (req, res) {
   var idEvent = input.idEvent
   var idUser = input.idSession
 
-  console.log('id user : ' + idUser + ', id event : ' + idEvent)
-
   db.database.getConnection(function (err, connection) {
     if (err) {
       console.log(err.code)
@@ -468,7 +480,6 @@ app.post('/delete_participation', function (req, res) {
     }
 
     connection.query('DELETE FROM PARTICIPE WHERE Id_EVENEMENT = ? AND Id_UTILISATEUR = ?', [idEvent, idUser], function (error, results, fields) {
-      console.log(error)
       if (error) {
         res.json(
           {

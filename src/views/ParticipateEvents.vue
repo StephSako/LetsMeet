@@ -35,7 +35,7 @@
                   <v-list-item-action>
                     <v-list-item-action-text>{{event.DateEvenement | formatDate}}</v-list-item-action-text>
                     <v-icon color="error" @click="unparticipate(event.Id_EVENEMENT)">mdi-close-circle</v-icon>
-                    <v-snackbar v-model="snackbar">
+                    <v-snackbar color="success" v-model="snackbar">
                       Vous ne participez plus à cet évènement
                     </v-snackbar>
                   </v-list-item-action>

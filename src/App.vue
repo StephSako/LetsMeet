@@ -46,23 +46,12 @@ import VueSession from 'vue-session'
 Vue.use(VueSession)
 export default {
   data () {
-    return {
-      prenom: '',
-      nom: '',
-      imageProfil: ''
-    }
+    return {}
   },
   methods: {
     logout () {
       this.$session.destroy()
       this.$router.push('/')
-    }
-  },
-  mounted () {
-    if (this.$session.exists()) {
-      this.prenom = this.$session.get('prenom')
-      this.nom = this.$session.get('nom')
-      this.imageProfil = this.$session.get('imageProfil')
     }
   }
 }

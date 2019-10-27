@@ -40,7 +40,7 @@
                       @click="participate(event.Id_EVENEMENT)">Participer
                     </v-btn>
 
-                    <v-snackbar v-model="snackbar">
+                    <v-snackbar color="success" v-model="snackbar">
                       Vous participez maintenant à cet évènement
                     </v-snackbar>
                   </v-list-item-action>
@@ -153,4 +153,7 @@ export default {
   height: 450px;
   width: 600px;
 }
+a {
+   text-decoration:none;
+ }
 </style>

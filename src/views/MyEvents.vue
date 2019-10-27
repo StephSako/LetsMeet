@@ -38,7 +38,7 @@
                       <v-icon>mdi-pencil-outline</v-icon>
                     </v-btn>
 
-                    <v-btn color="error" @click="onDelete(event.Id_EVENEMENT)">
+                    <v-btn color="error" @click="onDelete(event.Id_EVENEMENT, event)">
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
 
@@ -85,7 +85,7 @@
                       <v-icon>mdi-cancel</v-icon>
                     </v-btn>
 
-                    <v-snackbar v-model="snackbar">{{text}}</v-snackbar>
+                    <v-snackbar color="success" v-model="snackbar">{{text}}</v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
               </template>
@@ -127,7 +127,7 @@ export default {
     sessionInLive () {
       return this.$session.exists()
     },
-    onDelete (idEventToDelete) {
+    onDelete (idEventToDelete, event) {
       var self = this
       var headers = {
         'Content-Type': 'application/json'
@@ -139,15 +139,19 @@ export default {
         .post('http://localhost:4000/delete_event', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
-            self.text = 'Évènement supprimé ! Rafraichissez la page ...'
+            self.text = 'Évènement supprimé !'
             self.snackbar = true
           } else {
-            console.log('error')
+            console.log(response.data.auth)
+            console.log(response.data.error)
           }
         })
         .catch(function (error) {
           console.log(error)
         })
+
+      var index = this.my_events.indexOf(event)
+      this.my_events.splice(index, 1)
     },
     onEdit (eventEdit) {
       this.idEvent = eventEdit.Id_EVENEMENT
