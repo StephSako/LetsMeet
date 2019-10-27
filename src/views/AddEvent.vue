@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="6">
         <v-card width="400" class="mx-auto mt-5">
           <v-card-title>
             <h1 class="display-1">{{ titleEvent }}</h1>
@@ -26,16 +26,14 @@
           <v-divider></v-divider>
         </v-card>
       </v-col>
-      <v-col cols="12" md="4">
-        <v-card width="500" class="mx-auto mt-5">
-          <div class="map">
+      <v-col cols="12" md="6">
+        <div class="map">
           <l-map :zoom="zoom" :center="center">
             <l-tile-layer :url="url"></l-tile-layer>
             <l-marker :lat-lng="marker"></l-marker>
             <v-geosearch :options="geosearchOptions" ></v-geosearch>
           </l-map>
         </div>
-        </v-card>
       </v-col>
     </v-row>
   </v-container>

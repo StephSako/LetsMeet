@@ -11,7 +11,7 @@
     </v-alert>
     <v-row>
       <v-col cols="12" md="6">
-        <v-card max-width="500" class="mx-auto">
+        <v-card max-width="600" class="mx-auto">
           <v-toolbar color="blue" dark>
             <v-toolbar-title>Mes participations</v-toolbar-title>
           </v-toolbar>
@@ -107,7 +107,7 @@ export default {
           idEvent: idEvent,
           idSession: this.$session.get('key')
         }
-        
+
         var headers = {
           'Content-Type': 'application/json'
         }

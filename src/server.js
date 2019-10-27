@@ -328,6 +328,48 @@ app.post('/update_event', function (req, res) {
   })
 })
 
+app.post('/update_account', function (req, res) {
+  var input = req.body
+  var nom = input.nom
+  var prenom = input.prenom
+  var email = input.email
+  var imageProfil = input.imageProfil
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    var user = {
+      Nom: nom,
+      Prenom: prenom,
+      Email: email,
+      ImageProfil: imageProfil
+    }
+
+    connection.query('UPDATE UTILISATEUR SET ? WHERE Id_UTILISATEUR = ?', [user, idUser], function (error, results, fields) {
+      connection.release()
+      if (error) {
+        console.log(error)
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La mise à jour a échoué'
+          }
+        )
+      } else {
+        res.json(
+          {
+            auth: 'success'
+          }
+        )
+      }
+    })
+  })
+})
+
 app.post('/delete_event', function (req, res) {
   var input = req.body
   var idEvent = input.idEvent

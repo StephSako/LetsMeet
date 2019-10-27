@@ -185,7 +185,7 @@ export default {
         .post('http://localhost:4000/update_event', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
-            self.text = 'Évènement modifié ! Rafraichissez la page ...'
+            self.text = 'Évènement modifié ! Rafraichissez la page'
             self.snackbar = true
           } else {
             console.log('error')
