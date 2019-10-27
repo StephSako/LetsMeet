@@ -1,69 +1,72 @@
 <template>
-  <v-container class="grey lighten-5">
-    <v-row>
-      <v-flex md3 class="text-xs-center">
-        <v-card max-width="344" class="pa-3 mx-auto mt-10">
-          <v-img src="../assets/bato.jpg"></v-img>
-          <v-file-input label="File input"></v-file-input>
-        </v-card>
-      </v-flex>
+  <v-app>
+    <v-container>
+      <v-alert
+        class="text-center"
+        :value="true"
+        type="warning"
+        v-if="!sessionInLive()"
+      >Vous devez être connecté pour accéder à votre compte !</v-alert>
 
-      <v-flex md9>
-        <v-card class="pa-3 ma-5" tile justify="end">
-          <v-text-field
-            label="Nom"
-            v-model="nom">
-          </v-text-field>
+      <div v-if="sessionInLive()" class="grey lighten-5">
+        <v-row>
+          <v-flex md3 class="text-xs-center">
+            <v-card max-width="344" class="pa-3 mx-auto mt-10">
+              <v-img :src="editUser.imageProfil"></v-img>
 
-          <v-text-field
-            label="Prénom"
-            v-model="prenom">
-          </v-text-field>
+              <v-text-field label="Image de profil" v-model="editUser.imageProfil"></v-text-field>
+            </v-card>
+          </v-flex>
 
-          <v-text-field
-            label="Mail"
-            v-model="email">
-          </v-text-field>
+          <v-flex md9>
+            <v-card class="pa-3 ma-5" tile justify="end">
+              <v-text-field label="Nom" v-model="editUser.nom"></v-text-field>
 
-          <v-divider></v-divider>
+              <v-text-field label="Prénom" v-model="editUser.prenom"></v-text-field>
 
-          <v-row justify="center">
-            <v-btn depressed large color="primary" class="ma-5">Mettre à jour le profil</v-btn>
-          </v-row>
-        </v-card>
+              <v-text-field label="Mail" v-model="editUser.email"></v-text-field>
 
-        <v-card class="pa-3 ma-5" tile justify="end">
-          <v-text-field
-            label="Mot de passe actuel"
-            type="password"
-            v-model="passOld"
-            required></v-text-field>
+              <v-divider></v-divider>
 
-          <v-text-field
-            label="Nouveau mot de passe"
-            type="password"
-            v-model="pass1"
-            required></v-text-field>
+              <v-row justify="center">
+                <v-btn
+                  depressed
+                  large
+                  color="primary"
+                  class="ma-5"
+                  @click="updateAccount()"
+                >Mettre à jour le profil</v-btn>
+              </v-row>
+            </v-card>
 
-          <v-text-field
-            label="Nouveau mot de passe (verification)"
-            type="password"
-            v-model="pass2"
-            required
-          ></v-text-field>
+            <v-card class="pa-3 ma-5" tile justify="end">
+              <v-text-field label="Mot de passe actuel" type="password" v-model="passOld" required></v-text-field>
 
-          <v-divider></v-divider>
+              <v-text-field label="Nouveau mot de passe" type="password" v-model="pass1" required></v-text-field>
 
-          <v-row justify="center">
-            <v-btn depressed large color="primary" class="ma-5">Changer le mot de passe</v-btn>
-          </v-row>
-        </v-card>
-      </v-flex>
-    </v-row>
-  </v-container>
+              <v-text-field
+                label="Nouveau mot de passe (verification)"
+                type="password"
+                v-model="pass2"
+                required
+              ></v-text-field>
+
+              <v-divider></v-divider>
+
+              <v-row justify="center">
+                <v-btn depressed large color="primary" class="ma-5">Changer le mot de passe</v-btn>
+              </v-row>
+            </v-card>
+          </v-flex>
+          <v-snackbar color="success" v-model="snackbar" center>{{text}}</v-snackbar>
+        </v-row>
+      </div>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
+import axios from 'axios'
 import Vue from 'vue'
 import VueSession from 'vue-session'
 Vue.use(VueSession)
@@ -74,9 +77,14 @@ export default {
     pass2: null,
     passOld: null,
     valid: false,
-    email: null,
-    prenom: null,
-    nom: null
+    snackbar: false,
+    text: null,
+    editUser: {
+      prenom: '',
+      nom: '',
+      email: '',
+      imageProfil: ''
+    }
   }),
   methods: {
     checkForm: function (e) {
@@ -84,16 +92,50 @@ export default {
         this.valid = true
       }
       e.preventDefault()
+    },
+    updateAccount () {
+      var self = this
+      var headers = {
+        'Content-Type': 'application/json'
+      }
+      var data = {
+        nom: this.editUser.nom,
+        prenom: this.editUser.prenom,
+        email: this.editUser.email,
+        imageProfil: this.editUser.imageProfil,
+        idSession: this.$session.get('key')
+      }
+      axios
+        .post('http://localhost:4000/update_account', data, {
+          headers: headers
+        })
+        .then(function (response) {
+          console.log(response.data.auth)
+          if (response.data.auth !== 'failed') {
+            self.$session.set('email', self.editUser.email)
+            self.$session.set('prenom', self.editUser.prenom)
+            self.$session.set('nom', self.editUser.nom)
+            self.$session.set('imageProfil', self.editUser.imageProfil)
+            self.text = 'Compte mis à jour !'
+            self.snackbar = true
+            console.log(self.$session.get('prenom'))
+          } else {
+            console.log('error')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    sessionInLive () {
+      return this.$session.exists()
     }
   },
   mounted () {
-    if (this.$session.exists()) {
-      this.email = this.$session.get('email')
-      this.prenom = this.$session.get('prenom')
-      this.nom = this.$session.get('nom')
-    } else {
-      console.log('no session')
-    }
+    this.editUser.nom = this.$session.get('nom')
+    this.editUser.prenom = this.$session.get('prenom')
+    this.editUser.email = this.$session.get('email')
+    this.editUser.imageProfil = this.$session.get('imageProfil')
   }
 }
 </script>

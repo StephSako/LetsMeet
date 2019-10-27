@@ -68,6 +68,23 @@ app.post('/my_events', function (req, res) {
   })
 })
 
+app.post('/my_participations', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+    connection.query('SELECT * FROM UTILISATEUR NATURAL JOIN POST NATURAL JOIN EVENEMENT WHERE Id_EVENEMENT IN ( SELECT Id_EVENEMENT FROM PARTICIPE NATURAL JOIN EVENEMENT WHERE Id_UTILISATEUR = ? ) ORDER BY DateEvenement', [idUser], function (err, results, fields) {
+      connection.release()
+      if (err) console.log(err)
+      res.json(results)
+    })
+  })
+})
+
 app.post('/connexion', function (req, res) {
   var input = req.body
   var email = input.email
@@ -297,7 +314,7 @@ app.post('/update_event', function (req, res) {
         res.json(
           {
             auth: 'failed',
-            error: 'La mise à jour a échoué'
+            error: 'La mise à jour de l\'évènement a échoué'
           }
         )
       } else {
@@ -311,9 +328,13 @@ app.post('/update_event', function (req, res) {
   })
 })
 
-app.post('/delete_event', function (req, res) {
+app.post('/update_account', function (req, res) {
   var input = req.body
-  var idEvent = input.idEvent
+  var nom = input.nom
+  var prenom = input.prenom
+  var email = input.email
+  var imageProfil = input.imageProfil
+  var idUser = input.idSession
 
   db.database.getConnection(function (err, connection) {
     if (err) {
@@ -321,8 +342,90 @@ app.post('/delete_event', function (req, res) {
       throw err
     }
 
+    var user = {
+      Nom: nom,
+      Prenom: prenom,
+      Email: email,
+      ImageProfil: imageProfil
+    }
+
+    connection.query('UPDATE UTILISATEUR SET ? WHERE Id_UTILISATEUR = ?', [user, idUser], function (error, results, fields) {
+      connection.release()
+      if (error) {
+        console.log(error)
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La mise à jour du compte a échoué'
+          }
+        )
+      } else {
+        req.session.email = email
+        req.session.nom = nom
+        req.session.prenom = prenom
+        req.session.imageProfil = imageProfil
+        res.json(
+          {
+            auth: 'success'
+          }
+        )
+      }
+    })
+  })
+})
+
+app.post('/get_account', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('SELECT * FROM UTILISATEUR WHERE Id_UTILISATEUR = ?', [idUser], function (error, results, fields) {
+      connection.release()
+      if (error) {
+        console.log(error)
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La requete de get account a échoué'
+          }
+        )
+      } else {
+        req.session.email = results[0].Email
+        req.session.nom = results[0].Nom
+        req.session.prenom = results[0].Prenom
+        req.session.imageProfil = results[0].ImageProfil
+        res.json(
+          {
+            auth: 'success',
+            prenom: req.session.prenom,
+            nom: req.session.nom,
+            imageProfil: req.session.imageProfil,
+            email: req.session.email
+          }
+        )
+      }
+    })
+  })
+})
+
+app.post('/delete_event', function (req, res) {
+  var input = req.body
+  var idEvent = input.idEvent
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log('ERROR 0 : ' + err)
+      throw err
+    }
+
     connection.query('DELETE FROM POST WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
       if (error) {
+        console.log('ERROR 1 : ' + error)
         res.json(
           {
             auth: 'failed',
@@ -330,23 +433,66 @@ app.post('/delete_event', function (req, res) {
           }
         )
       } else {
-        connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
-          connection.release()
+        connection.query('DELETE FROM PARTICIPE WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
           if (error) {
+            console.log('ERROR 2 : ' + error)
             res.json(
               {
                 auth: 'failed',
-                error: 'La suppression de l\'évènement a échoué'
+                error: 'La suppression de la participation a échoué'
               }
             )
           } else {
-            res.json(
-              {
-                auth: 'success'
+            connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
+              connection.release()
+              if (error) {
+                console.log('ERROR 3 : ' + error)
+                res.json(
+                  {
+                    auth: 'failed',
+                    error: 'La suppression de l\'évènement a échoué'
+                  }
+                )
+              } else {
+                res.json(
+                  {
+                    auth: 'success'
+                  }
+                )
               }
-            )
+            })
           }
         })
+      }
+    })
+  })
+})
+
+app.post('/delete_participation', function (req, res) {
+  var input = req.body
+  var idEvent = input.idEvent
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('DELETE FROM PARTICIPE WHERE Id_EVENEMENT = ? AND Id_UTILISATEUR = ?', [idEvent, idUser], function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La suppression de la participation a échoué'
+          }
+        )
+      } else {
+        res.json(
+          {
+            auth: 'success'
+          }
+        )
       }
     })
   })

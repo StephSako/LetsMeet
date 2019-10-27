@@ -10,33 +10,30 @@
       <v-chip v-if="this.$session.exists()">
         <router-link to="/compte">
           <v-avatar left>
-            <v-img :src="imageProfil"></v-img>
-          </v-avatar>{{prenom + ' ' + nom}}
+            <v-img :src="this.$session.get('imageProfil')"></v-img>
+          </v-avatar>
+          {{this.$session.get('prenom') + ' ' + this.$session.get('nom')}}
         </router-link>
       </v-chip>
 
       <v-btn text v-if="this.$session.exists()">
-        <router-link to="/my_events">
-          Mes évènements
-        </router-link>
+        <router-link to="/my_events">Mes évènements</router-link>
+      </v-btn>
+
+      <v-btn text v-if="this.$session.exists()">
+        <router-link to="/participate_events">Mes Participations</router-link>
       </v-btn>
 
       <v-btn text v-if="!this.$session.exists()">
-        <router-link to="/connexion">
-          Se connecter
-        </router-link>
+        <router-link to="/connexion">Se connecter</router-link>
       </v-btn>
 
       <v-btn text v-if="!this.$session.exists()">
-        <router-link to="/inscription">
-          S'inscrire
-        </router-link>
+        <router-link to="/inscription">S'inscrire</router-link>
       </v-btn>
 
-      <v-btn text v-if="this.$session.exists()" @click="logout">
-        <router-link to="/logout">
-          <v-icon>mdi-account-remove-outline</v-icon>
-        </router-link>
+      <v-btn icon v-if="this.$session.exists()" @click="logout">
+        <router-link to="/logout"><v-icon>mdi-account-remove-outline</v-icon></router-link>
       </v-btn>
     </v-toolbar>
     <router-view></router-view>
@@ -49,11 +46,7 @@ import VueSession from 'vue-session'
 Vue.use(VueSession)
 export default {
   data () {
-    return {
-      prenom: this.$session.get('prenom'),
-      nom: this.$session.get('nom'),
-      imageProfil: this.$session.get('imageProfil')
-    }
+    return {}
   },
   methods: {
     logout () {
