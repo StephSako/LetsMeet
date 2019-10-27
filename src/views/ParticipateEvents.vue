@@ -7,18 +7,18 @@
       type="warning"
       v-if="!sessionInLive()"
     >
-      Vous devez être connecté pour participer aux évènements !
+      Vous devez être connecté pour visualiser vos participations aux évènements !
     </v-alert>
     <v-row>
       <v-col cols="12" md="6">
         <v-card max-width="500" class="mx-auto">
           <v-toolbar color="blue" dark>
-            <v-toolbar-title>Tous les évènements</v-toolbar-title>
+            <v-toolbar-title>Mes participations</v-toolbar-title>
           </v-toolbar>
 
           <v-list dense>
             <v-list-item-group>
-              <template v-for="(event, index) in events">
+              <template v-for="(event, index) in participations_events">
                 <v-divider :key="index" v-if="index > 0"></v-divider>
                 <v-list-item :key="event.Titre" @click="setMarker(event.Latitude, event.Longitude)">
                   <v-list-item-avatar>
@@ -34,13 +34,9 @@
 
                   <v-list-item-action>
                     <v-list-item-action-text>{{event.DateEvenement | formatDate}}</v-list-item-action-text>
-                    <v-btn
-                      v-if="sessionInLive()"
-                      color="info"
-                      @click="participate(event.Id_EVENEMENT)"
-                    >Participer</v-btn>
+                    <v-icon color="error" @click="unparticipate(event.Id_EVENEMENT)">mdi-close-circle</v-icon>
                     <v-snackbar v-model="snackbar">
-                      Vous participez maintenant à cet évènement
+                      Vous ne participez plus à cet évènement
                     </v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
@@ -59,12 +55,6 @@
         </div>
       </v-col>
     </v-row>
-
-    <v-btn fab large fixed left bottom>
-      <router-link to="/add_event">
-        <v-icon>mdi-plus-circle</v-icon>
-      </router-link>
-    </v-btn>
   </v-container>
 </template>
 
@@ -87,7 +77,7 @@ Icon.Default.mergeOptions({
 })
 
 export default {
-  name: 'Home',
+  name: 'ParticipateEvents',
   components: {
     LMap,
     LTileLayer,
@@ -95,7 +85,7 @@ export default {
   },
   data () {
     return {
-      events: null,
+      participations_events: null,
       snackbar: false,
 
       // Map
@@ -110,21 +100,27 @@ export default {
       this.marker = [latitude, longitude]
       this.center = [latitude, longitude]
     },
-    participate (idEvent) {
+    unparticipate (idEvent) {
+      var self = this
       if (this.$session.exists()) {
-        this.snackbar = true
         var data = {
           idEvent: idEvent,
           idSession: this.$session.get('key')
         }
+        
         var headers = {
           'Content-Type': 'application/json'
         }
         axios
-          .post('http://localhost:4000/participate', data, {
+          .post('http://localhost:4000/delete_participation', data, {
             headers: headers
           })
-          .then(function (response) {})
+          .then(function (response) {
+            console.log(response.data.auth)
+            if (response.data.auth !== 'failed') {
+              self.snackbar = true
+            }
+          })
           .catch(function (error) {
             console.log(error)
           })
@@ -137,12 +133,23 @@ export default {
   mounted () {
     var headers = { 'Content-Type': 'application/json' }
     var self = this
-
-    axios
-      .get('http://localhost:4000/events', { headers: headers })
-      .then(function (response) {
-        self.events = response.data
-      })
+    if (this.$session.exists()) {
+      var data = {
+        idSession: this.$session.get('key')
+      }
+      axios
+        .post('http://localhost:4000/my_participations', data, { headers: headers })
+        .then(function (response) {
+          if (response.data.auth !== 'failed') {
+            self.participations_events = response.data
+          } else {
+            console.log('error')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    }
   }
 }
 </script>

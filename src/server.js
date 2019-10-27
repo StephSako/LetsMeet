@@ -68,6 +68,23 @@ app.post('/my_events', function (req, res) {
   })
 })
 
+app.post('/my_participations', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+    connection.query('SELECT * FROM UTILISATEUR NATURAL JOIN POST NATURAL JOIN EVENEMENT WHERE Id_EVENEMENT IN ( SELECT Id_EVENEMENT FROM PARTICIPE NATURAL JOIN EVENEMENT WHERE Id_UTILISATEUR = ? ) ORDER BY DateEvenement', [idUser], function (err, results, fields) {
+      connection.release()
+      if (err) console.log(err)
+      res.json(results)
+    })
+  })
+})
+
 app.post('/connexion', function (req, res) {
   var input = req.body
   var email = input.email
@@ -347,6 +364,39 @@ app.post('/delete_event', function (req, res) {
             )
           }
         })
+      }
+    })
+  })
+})
+
+app.post('/delete_participation', function (req, res) {
+  var input = req.body
+  var idEvent = input.idEvent
+  var idUser = input.idSession
+
+  console.log('id user : ' + idUser + ', id event : ' + idEvent)
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('DELETE FROM PARTICIPE WHERE Id_EVENEMENT = ? AND Id_UTILISATEUR = ?', [idEvent, idUser], function (error, results, fields) {
+      console.log(error)
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La suppression de la participation a échoué'
+          }
+        )
+      } else {
+        res.json(
+          {
+            auth: 'success'
+          }
+        )
       }
     })
   })
