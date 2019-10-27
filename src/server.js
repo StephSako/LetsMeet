@@ -37,23 +37,32 @@ app.get('/api', function (req, res) {
   res.json({ status: 'Working' })
 })
 
-app.get('/logout', (req, res, next) => {
-  if (req.session) {
-    req.session.destroy(function (err) {
-      if (err) {
-        return next(err)
-      } else {
-        return res.redirect('/')
-      }
-    })
-  }
-})
-
 app.get('/events', function (req, res) {
   db.database.getConnection(function (err, connection) {
-    if (err) throw err
-    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN UTILISATEUR', function (err, results, fields) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN POST NATURAL JOIN UTILISATEUR ORDER BY EVENEMENT.DateEvenement', function (err, results, fields) {
+      connection.release()
       if (err) console.log('Error request events')
+      res.json(results)
+    })
+  })
+})
+
+app.post('/my_events', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN POST NATURAL JOIN UTILISATEUR WHERE Id_UTILISATEUR = ? ORDER BY EVENEMENT.DateEvenement', [idUser], function (err, results, fields) {
+      connection.release()
+      if (err) console.log('Error request my_events')
       res.json(results)
     })
   })
@@ -65,12 +74,16 @@ app.post('/connexion', function (req, res) {
   var password = input.password
 
   db.database.getConnection(function (err, connection) {
-    if (err) throw err
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
     connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
+      connection.release()
       if (error) throw error
       if (results.length > 0) {
         if (password === results[0].Password) {
-          req.session.key = results[0].Id
+          req.session.key = results[0].Id_UTILISATEUR
           req.session.email = results[0].Email
           req.session.nom = results[0].Nom
           req.session.prenom = results[0].Prenom
@@ -109,7 +122,10 @@ app.post('/inscription', function (req, res) {
   var imageProfil = input.imageProfil
 
   db.database.getConnection(function (err, connection) {
-    if (err) throw err
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
 
     var utilisateur = {
       Email: email,
@@ -120,6 +136,7 @@ app.post('/inscription', function (req, res) {
     }
 
     connection.query('INSERT INTO UTILISATEUR SET ?', utilisateur, function (error, results, fields) {
+      connection.release()
       if (error) {
         res.json(
           {
@@ -129,7 +146,6 @@ app.post('/inscription', function (req, res) {
         )
       } else {
         req.session.key = results.insertId
-        req.session.id = results.insertId
         req.session.email = email
         req.session.nom = nom
         req.session.prenom = prenom
@@ -137,12 +153,76 @@ app.post('/inscription', function (req, res) {
         res.json(
           {
             auth: 'success',
-            id: req.session.id,
+            key: req.session.key,
             prenom: req.session.prenom,
             nom: req.session.nom,
             imageProfil: req.session.imageProfil
           }
         )
+      }
+    })
+  })
+})
+
+app.post('/add_event', function (req, res) {
+  var input = req.body
+  var titre = input.titre
+  var resume = input.resume
+  var dateEvent = input.dateEvent
+  var adresse = input.adresse
+  var latitude = input.latitude
+  var longitude = input.longitude
+  var idUser = input.idSession
+  var dateCreation = input.longitude
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    var event = {
+      Titre: titre,
+      Password: resume,
+      DateEvenement: dateEvent,
+      Adresse: adresse,
+      Latitude: latitude,
+      Longitude: longitude
+    }
+
+    connection.query('INSERT INTO EVENEMENT SET ?', event, function (error, results, fields) {
+      connection.release()
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La creation de l\'evenement a échoué'
+          }
+        )
+      } else {
+        var post = {
+          Id_EVENEMENT: results.insertId,
+          Id_UTILISATEUR: idUser,
+          DateCreation: dateCreation
+        }
+
+        connection.query('INSERT INTO POST SET ?', post, function (error, results, fields) {
+          connection.release()
+          if (error) {
+            res.json(
+              {
+                auth: 'failed',
+                error: 'Le post a échoué'
+              }
+            )
+          } else {
+            res.json(
+              {
+                auth: 'success'
+              }
+            )
+          }
+        })
       }
     })
   })
@@ -154,7 +234,10 @@ app.post('/participate', function (req, res) {
   var idEvenement = input.idEvent
 
   db.database.getConnection(function (err, connection) {
-    if (err) throw err
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
 
     var participe = {
       Id_UTILISATEUR: idUtilisateur,
@@ -162,7 +245,9 @@ app.post('/participate', function (req, res) {
     }
 
     connection.query('INSERT INTO PARTICIPE SET ?', participe, function (error, results, fields) {
+      connection.release()
       if (error) {
+        console.log(error)
         res.json(
           {
             auth: 'failed',
@@ -175,6 +260,93 @@ app.post('/participate', function (req, res) {
             auth: 'success'
           }
         )
+      }
+    })
+  })
+})
+
+app.post('/update_event', function (req, res) {
+  var input = req.body
+  var titre = input.titre
+  var resume = input.resume
+  var dateEvent = input.dateEvent
+  var adresse = input.adresse
+  var latitude = input.latitude
+  var longitude = input.longitude
+  var idEvent = input.idEvent
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    var event = {
+      Titre: titre,
+      Resume: resume,
+      DateEvenement: dateEvent,
+      Adresse: adresse,
+      Latitude: latitude,
+      Longitude: longitude
+    }
+
+    connection.query('UPDATE EVENEMENT SET ? WHERE Id_EVENEMENT = ?', [event, idEvent], function (error, results, fields) {
+      connection.release()
+      if (error) {
+        console.log(error)
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La mise à jour a échoué'
+          }
+        )
+      } else {
+        res.json(
+          {
+            auth: 'success'
+          }
+        )
+      }
+    })
+  })
+})
+
+app.post('/delete_event', function (req, res) {
+  var input = req.body
+  var idEvent = input.idEvent
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('DELETE FROM POST WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La suppression du post a échoué'
+          }
+        )
+      } else {
+        connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
+          connection.release()
+          if (error) {
+            res.json(
+              {
+                auth: 'failed',
+                error: 'La suppression de l\'évènement a échoué'
+              }
+            )
+          } else {
+            res.json(
+              {
+                auth: 'success'
+              }
+            )
+          }
+        })
       }
     })
   })

@@ -5,5 +5,6 @@ var database = mysql.createPool({
   password: 'jesuis95etgta#',
   database: 'letsmeet_letsmeet_bd'
 })
+
 module.exports = database
 module.exports.database = database

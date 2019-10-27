@@ -2,20 +2,21 @@
   <v-container>
 
     <v-alert
+      class="text-center"
       :value="true"
-      type="error"
+      type="warning"
       v-if="!sessionInLive()"
     >
       Vous devez être connecté pour participer aux évènements !
     </v-alert>
     <v-row>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="6">
         <v-card max-width="500" class="mx-auto">
           <v-toolbar color="blue" dark>
             <v-toolbar-title>Tous les évènements</v-toolbar-title>
           </v-toolbar>
 
-          <v-list two-line>
+          <v-list dense>
             <v-list-item-group>
               <template v-for="(event, index) in events">
                 <v-divider :key="index" v-if="index > 0"></v-divider>
@@ -31,14 +32,14 @@
                   </v-list-item-content>
 
                   <v-list-item-action>
-                    <v-list-item-action-text v-text="event.DateEvenement"></v-list-item-action-text>
+                    <v-list-item-action-text>{{event.DateEvenement | formatDate}}</v-list-item-action-text>
                     <v-btn
                       v-if="sessionInLive()"
                       color="info"
-                      @click="participate(event.Id)"
+                      @click="participate(event.Id_EVENEMENT)"
                     >Participer</v-btn>
                     <v-snackbar v-model="snackbar">
-                      Vous participer maintenant à '{{event.Titre}}'
+                      Vous participer maintenant à cet évènement
                     </v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
@@ -48,7 +49,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="6">
         <div class="map">
           <l-map :zoom="zoom" :center="center">
             <l-tile-layer :url="url"></l-tile-layer>
@@ -79,7 +80,7 @@ Icon.Default.mergeOptions({
 })
 
 export default {
-  name: 'Map',
+  name: 'Home',
   components: {
     LMap,
     LTileLayer,
@@ -130,13 +131,11 @@ export default {
     var headers = { 'Content-Type': 'application/json' }
     var self = this
 
-    if (!this.charged) {
-      axios
-        .get('http://localhost:4000/events', { headers: headers })
-        .then(function (response) {
-          self.events = response.data
-        })
-    }
+    axios
+      .get('http://localhost:4000/events', { headers: headers })
+      .then(function (response) {
+        self.events = response.data
+      })
   }
 }
 </script>
