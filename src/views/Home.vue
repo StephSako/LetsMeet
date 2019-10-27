@@ -61,7 +61,7 @@
       </v-col>
     </v-row>
 
-    <v-btn fab large fixed left bottom>
+    <v-btn fab fixed right bottom class='blue' style="z-index: 1000">
       <router-link to="/add_event">
         <v-icon>mdi-plus-circle</v-icon>
       </router-link>

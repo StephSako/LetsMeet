@@ -10,9 +10,9 @@
       <v-chip v-if="this.$session.exists()">
         <router-link to="/compte">
           <v-avatar left>
-            <v-img :src="imageProfil"></v-img>
+            <v-img :src="this.$session.get('imageProfil')"></v-img>
           </v-avatar>
-          {{prenom + ' ' + nom}}
+          {{this.$session.get('prenom') + ' ' + this.$session.get('nom')}}
         </router-link>
       </v-chip>
 
@@ -47,15 +47,22 @@ Vue.use(VueSession)
 export default {
   data () {
     return {
-      prenom: this.$session.get('prenom'),
-      nom: this.$session.get('nom'),
-      imageProfil: this.$session.get('imageProfil')
+      prenom: '',
+      nom: '',
+      imageProfil: ''
     }
   },
   methods: {
     logout () {
       this.$session.destroy()
       this.$router.push('/')
+    }
+  },
+  mounted () {
+    if (this.$session.exists()) {
+      this.prenom = this.$session.get('prenom')
+      this.nom = this.$session.get('nom')
+      this.imageProfil = this.$session.get('imageProfil')
     }
   }
 }
