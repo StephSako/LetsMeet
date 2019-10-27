@@ -266,6 +266,52 @@ app.post('/participate', function (req, res) {
   })
 })
 
+app.post('/update_event', function (req, res) {
+  var input = req.body
+  var titre = input.titre
+  var resume = input.resume
+  var dateEvent = input.dateEvent
+  var adresse = input.adresse
+  var latitude = input.latitude
+  var longitude = input.longitude
+  var idEvent = input.idEvent
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    var event = {
+      Titre: titre,
+      Resume: resume,
+      DateEvenement: dateEvent,
+      Adresse: adresse,
+      Latitude: latitude,
+      Longitude: longitude
+    }
+
+    connection.query('UPDATE EVENEMENT SET ? WHERE Id_EVENEMENT = ?', [event, idEvent], function (error, results, fields) {
+      connection.release()
+      if (error) {
+        console.log(error)
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La mise à jour a échoué'
+          }
+        )
+      } else {
+        res.json(
+          {
+            auth: 'success'
+          }
+        )
+      }
+    })
+  })
+})
+
 const port = process.env.PORT || 4000
 app.listen(port, () => {
   console.log(`listening on ${port}`)

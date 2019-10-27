@@ -16,7 +16,7 @@
             <v-toolbar-title>Tous les évènements</v-toolbar-title>
           </v-toolbar>
 
-          <v-list two-line>
+          <v-list dense>
             <v-list-item-group>
               <template v-for="(event, index) in events">
                 <v-divider :key="index" v-if="index > 0"></v-divider>
