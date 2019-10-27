@@ -21,15 +21,15 @@
         </router-link>
       </v-btn>
 
-      <v-btn icon v-if="!this.$session.exists()">
+      <v-btn text v-if="!this.$session.exists()">
         <router-link to="/connexion">
-          <v-icon>mdi-account-arrow-right-outline</v-icon>
+          Se connecter
         </router-link>
       </v-btn>
 
-      <v-btn icon v-if="!this.$session.exists()">
+      <v-btn text v-if="!this.$session.exists()">
         <router-link to="/inscription">
-          <v-icon>mdi-account-plus-outline</v-icon>
+          S'inscrire
         </router-link>
       </v-btn>
 

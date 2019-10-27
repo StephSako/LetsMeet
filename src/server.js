@@ -218,8 +218,7 @@ app.post('/add_event', function (req, res) {
           } else {
             res.json(
               {
-                auth: 'failed',
-                error: 'Le post a échoué'
+                auth: 'success'
               }
             )
           }
@@ -307,6 +306,48 @@ app.post('/update_event', function (req, res) {
             auth: 'success'
           }
         )
+      }
+    })
+  })
+})
+
+app.post('/delete_event', function (req, res) {
+  var input = req.body
+  var idEvent = input.idEvent
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('DELETE FROM POST WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
+      if (error) {
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La suppression du post a échoué'
+          }
+        )
+      } else {
+
+        connection.query('DELETE FROM EVENEMENT WHERE Id_EVENEMENT = ?', [idEvent], function (error, results, fields) {
+          connection.release()
+          if (error) {
+            res.json(
+              {
+                auth: 'failed',
+                error: 'La suppression de l\'évènement a échoué'
+              }
+            )
+          } else {
+            res.json(
+              {
+                auth: 'success'
+              }
+            )
+          }
+        })
       }
     })
   })

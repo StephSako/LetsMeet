@@ -42,7 +42,7 @@
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
 
-                    <v-snackbar v-model="snackbar">Vous participer maintenant à '{{event.Titre}}'</v-snackbar>
+                    <v-snackbar v-model="snackbar">{{text}}'</v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
               </template>
@@ -85,7 +85,7 @@
                       <v-icon>mdi-cancel</v-icon>
                     </v-btn>
 
-                    <v-snackbar v-model="snackbar">Vous participer maintenant à '{{event.Titre}}'</v-snackbar>
+                    <v-snackbar v-model="snackbar">{{text}}</v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
               </template>
@@ -102,12 +102,12 @@ import axios from 'axios'
 import Vue from 'vue'
 import VueSession from 'vue-session'
 Vue.use(VueSession)
-
 export default {
   name: 'MyEvents',
   data () {
     return {
       my_events: null,
+      text: null,
       snackbar: false,
       idEvent: '',
       editEvent: {
@@ -127,8 +127,27 @@ export default {
     sessionInLive () {
       return this.$session.exists()
     },
-    onDelete (id) {
-      console.log('DELETE ID : ' + id)
+    onDelete (idEventToDelete) {
+      var self = this
+      var headers = {
+        'Content-Type': 'application/json'
+      }
+      var data = {
+        idEvent: idEventToDelete
+      }
+      axios
+        .post('http://localhost:4000/delete_event', data, { headers: headers })
+        .then(function (response) {
+          if (response.data.auth !== 'failed') {
+            self.text = 'Évènement supprimé ! Rafraichissez la page ...'
+            self.snackbar = true
+          } else {
+            console.log('error')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     onEdit (eventEdit) {
       this.idEvent = eventEdit.Id_EVENEMENT
@@ -149,6 +168,7 @@ export default {
       this.editEvent.longitude = ''
     },
     onEditSubmit (idEvent) {
+      var self = this
       var headers = {
         'Content-Type': 'application/json'
       }
@@ -165,7 +185,8 @@ export default {
         .post('http://localhost:4000/update_event', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
-            self.my_events = response.data
+            self.text = 'Évènement modifié ! Rafraichissez la page ...'
+            self.snackbar = true
           } else {
             console.log('error')
           }
@@ -173,7 +194,6 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
-
       this.idEvent = ''
       this.editEvent.titre = ''
       this.editEvent.resume = ''
@@ -186,7 +206,6 @@ export default {
   mounted () {
     var headers = { 'Content-Type': 'application/json' }
     var self = this
-
     if (this.$session.exists()) {
       var data = {
         idSession: this.$session.get('key')
