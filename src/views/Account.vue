@@ -13,7 +13,6 @@
           <v-flex md3 class="text-xs-center">
             <v-card max-width="344" class="pa-3 mx-auto mt-10">
               <v-img :src="editUser.imageProfil"></v-img>
-
               <v-text-field label="Image de profil" v-model="editUser.imageProfil"></v-text-field>
             </v-card>
           </v-flex>

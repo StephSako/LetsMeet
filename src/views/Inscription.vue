@@ -29,6 +29,12 @@
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     @click:append="showPassword=!showPassword"
                     />
+
+                    <v-text-field
+                    label="URL image de profil"
+                    v-model="imageProdil"
+                    prepend-icon="mdi-camera"/>
+
                 </v-form>
             </v-card-text>
             <v-divider></v-divider>
@@ -54,7 +60,8 @@ export default {
     email: '',
     prenom: '',
     nom: '',
-    password: ''
+    password: '',
+    imageProfil: ''
   }),
   methods: {
     inscription () {
@@ -65,7 +72,7 @@ export default {
           password: this.password,
           prenom: this.prenom,
           nom: this.nom,
-          imageProfil: 'crouton.png'
+          imageProfil: this.imageProfil
         }
         var headers = {
           'Content-Type': 'application/json'
@@ -78,7 +85,7 @@ export default {
             self.$session.set('email', self.email)
             self.$session.set('prenom', self.prenom)
             self.$session.set('nom', self.nom)
-            self.$session.set('imageProfil', 'crouton.png')
+            self.$session.set('imageProfil', self.imageProfil)
             self.$router.push('/')
           }
         }).catch(function (error) {
