@@ -314,7 +314,7 @@ app.post('/update_event', function (req, res) {
         res.json(
           {
             auth: 'failed',
-            error: 'La mise à jour a échoué'
+            error: 'La mise à jour de l\'évènement a échoué'
           }
         )
       } else {
@@ -356,13 +356,56 @@ app.post('/update_account', function (req, res) {
         res.json(
           {
             auth: 'failed',
-            error: 'La mise à jour a échoué'
+            error: 'La mise à jour du compte a échoué'
           }
         )
       } else {
+        req.session.email = email
+        req.session.nom = nom
+        req.session.prenom = prenom
+        req.session.imageProfil = imageProfil
         res.json(
           {
             auth: 'success'
+          }
+        )
+      }
+    })
+  })
+})
+
+app.post('/get_account', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('SELECT * FROM UTILISATEUR WHERE Id_UTILISATEUR = ?', [idUser], function (error, results, fields) {
+      connection.release()
+      if (error) {
+        console.log(error)
+        res.json(
+          {
+            auth: 'failed',
+            error: 'La requete de get account a échoué'
+          }
+        )
+      } else {
+        req.session.email = results[0].Email
+        req.session.nom = results[0].Nom
+        req.session.prenom = results[0].Prenom
+        req.session.imageProfil = results[0].ImageProfil
+        res.json(
+          {
+            auth: 'success',
+            prenom: req.session.prenom,
+            nom: req.session.nom,
+            imageProfil: req.session.imageProfil,
+            email: req.session.email
           }
         )
       }

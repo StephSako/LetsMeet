@@ -37,8 +37,9 @@
                     <v-btn
                       v-if="sessionInLive()"
                       color="info"
-                      @click="participate(event.Id_EVENEMENT)"
-                    >Participer</v-btn>
+                      @click="participate(event.Id_EVENEMENT)">Participer
+                    </v-btn>
+
                     <v-snackbar v-model="snackbar">
                       Vous participez maintenant à cet évènement
                     </v-snackbar>
