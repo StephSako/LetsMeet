@@ -190,7 +190,7 @@ app.post('/add_event', function (req, res) {
   var latitude = input.latitude
   var longitude = input.longitude
   var idUser = input.idSession
-  var dateCreation = input.longitude
+  var dateCreation = input.dateCreation
 
   db.database.getConnection(function (err, connection) {
     if (err) {
@@ -200,7 +200,7 @@ app.post('/add_event', function (req, res) {
 
     var event = {
       Titre: titre,
-      Password: resume,
+      Resume: resume,
       DateEvenement: dateEvent,
       Adresse: adresse,
       Latitude: latitude,
@@ -208,7 +208,6 @@ app.post('/add_event', function (req, res) {
     }
 
     connection.query('INSERT INTO EVENEMENT SET ?', event, function (error, results, fields) {
-      connection.release()
       if (error) {
         res.json(
           {
