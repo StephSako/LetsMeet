@@ -1,36 +1,64 @@
 <template>
   <v-app>
-    <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+    <v-toolbar dense>
+      <v-toolbar-title>
+        <router-link to="/">Let's Meet</router-link>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
-    </v-app-bar>
 
-    <v-content>
-      <HelloWorld/>
-    </v-content>
+      <div class="flex-grow-1"></div>
+
+      <v-chip v-if="this.$session.exists()">
+        <router-link to="/compte">
+          <v-avatar left>
+            <v-img :src="this.$session.get('imageProfil')"></v-img>
+          </v-avatar>
+          {{this.$session.get('prenom') + ' ' + this.$session.get('nom')}}
+        </router-link>
+      </v-chip>
+
+      <v-btn text v-if="this.$session.exists()">
+        <router-link to="/my_events">Mes évènements</router-link>
+      </v-btn>
+
+      <v-btn text v-if="this.$session.exists()">
+        <router-link to="/participate_events">Mes Participations</router-link>
+      </v-btn>
+
+      <v-btn text v-if="!this.$session.exists()">
+        <router-link to="/connexion">Se connecter</router-link>
+      </v-btn>
+
+      <v-btn text v-if="!this.$session.exists()">
+        <router-link to="/inscription">S'inscrire</router-link>
+      </v-btn>
+
+      <v-btn icon v-if="this.$session.exists()" @click="logout">
+        <router-link to="/logout"><v-icon>mdi-account-remove-outline</v-icon></router-link>
+      </v-btn>
+    </v-toolbar>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-
+import Vue from 'vue'
+import VueSession from 'vue-session'
+Vue.use(VueSession)
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  data () {
+    return {}
   },
-  data: () => ({
-    //
-  })
+  methods: {
+    logout () {
+      this.$session.destroy()
+      this.$router.push('/')
+    }
+  }
 }
 </script>
+
+<style scoped>
+a {
+   text-decoration:none;
+ }
+</style>
