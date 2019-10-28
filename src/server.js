@@ -479,6 +479,7 @@ app.post('/delete_participation', function (req, res) {
     }
 
     connection.query('DELETE FROM PARTICIPE WHERE Id_EVENEMENT = ? AND Id_UTILISATEUR = ?', [idEvent, idUser], function (error, results, fields) {
+      connection.release()
       if (error) {
         res.json(
           {
@@ -492,6 +493,59 @@ app.post('/delete_participation', function (req, res) {
             auth: 'success'
           }
         )
+      }
+    })
+  })
+})
+
+app.post('/update_password', function (req, res) {
+  var input = req.body
+  var idUser = input.idSession
+  var actualPassword = input.actualPassword
+  var newPassword = input.newPassword
+
+  db.database.getConnection(function (err, connection) {
+    if (err) {
+      console.log(err.code)
+      throw err
+    }
+
+    connection.query('SELECT * FROM UTILISATEUR WHERE Id_UTILISATEUR = ?', [idUser], function (error, results, fields) {
+      if (error) throw error
+
+      if (results.length > 0) {
+        if (actualPassword === results[0].Password) {
+          var user = {
+            Password: newPassword
+          }
+
+          connection.query('UPDATE UTILISATEUR SET ? WHERE Id_UTILISATEUR = ?', [user, idUser], function (error, results, fields) {
+            connection.release()
+            if (error) {
+              res.json(
+                {
+                  auth: 'failed',
+                  error: 'La mise à jour du mot de passe à échoué'
+                }
+              )
+            } else {
+              res.json(
+                {
+                  auth: 'success'
+                }
+              )
+            }
+          })
+        } else {
+          res.json(
+            {
+              auth: 'failed',
+              error: 'Mot de passe actuel incorrect'
+            }
+          )
+        }
+      } else {
+        res.json({ auth: 'failed', error: 'error search account update password' })
       }
     })
   })
