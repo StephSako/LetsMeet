@@ -110,7 +110,7 @@ export default {
           'Content-Type': 'application/json'
         }
         axios
-          .post('http://localhost:4000/delete_participation', data, {
+          .post('/delete_participation', data, {
             headers: headers
           })
           .then(function (response) {
@@ -139,7 +139,7 @@ export default {
         idSession: this.$session.get('key')
       }
       axios
-        .post('http://localhost:4000/my_participations', data, { headers: headers })
+        .post('/my_participations', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
             self.participations_events = response.data

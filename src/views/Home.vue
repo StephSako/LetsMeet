@@ -104,7 +104,7 @@ export default {
       center: [48.973526, 2.201292],
       url: 'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
       marker: [48.973526, 2.201292],
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }
   },
   methods: {
@@ -123,7 +123,7 @@ export default {
           'Content-Type': 'application/json'
         }
         axios
-          .post('http://localhost:4000/participate', data, {
+          .post('/participate', data, {
             headers: headers
           })
           .then(function (response) {})
@@ -141,7 +141,7 @@ export default {
     var self = this
 
     axios
-      .get('http://localhost:4000/events', { headers: headers })
+      .get('/events', { headers: headers })
       .then(function (response) {
         self.events = response.data
       })

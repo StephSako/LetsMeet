@@ -77,7 +77,7 @@ export default {
         var headers = {
           'Content-Type': 'application/json'
         }
-        axios.post('http://localhost:4000/inscription', data, {
+        axios.post('/inscription', data, {
           headers: headers
         }).then(function (response) {
           if (response.data.auth !== 'failed') {

@@ -136,7 +136,7 @@ export default {
         idEvent: idEventToDelete
       }
       axios
-        .post('http://localhost:4000/delete_event', data, { headers: headers })
+        .post('/delete_event', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
             self.text = 'Évènement supprimé !'
@@ -186,7 +186,7 @@ export default {
         idEvent: idEvent
       }
       axios
-        .post('http://localhost:4000/update_event', data, { headers: headers })
+        .post('/update_event', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
             self.text = 'Évènement modifié ! Rafraichissez la page'
@@ -215,7 +215,7 @@ export default {
         idSession: this.$session.get('key')
       }
       axios
-        .post('http://localhost:4000/my_events', data, { headers: headers })
+        .post('/my_events', data, { headers: headers })
         .then(function (response) {
           if (response.data.auth !== 'failed') {
             self.my_events = response.data

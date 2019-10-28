@@ -113,7 +113,7 @@ export default {
         idSession: this.$session.get('key')
       }
       axios
-        .post('http://localhost:4000/update_account', data, {
+        .post('/update_account', data, {
           headers: headers
         })
         .then(function (response) {
@@ -150,7 +150,7 @@ export default {
             idSession: this.$session.get('key')
           }
           axios
-            .post('http://localhost:4000/update_password', data, {
+            .post('/update_password', data, {
               headers: headers
             })
             .then(function (response) {
