@@ -35,14 +35,12 @@
                   <v-list-item-action>
                     <v-list-item-action-text>{{event.DateEvenement | formatDate}}</v-list-item-action-text>
                     <v-icon color="error" @click="unparticipate(event.Id_EVENEMENT, event)">mdi-close-circle</v-icon>
-                    <v-snackbar color="success" v-model="snackbar">
-                      Vous ne participez plus à cet évènement
-                    </v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
               </template>
             </v-list-item-group>
           </v-list>
+            <v-snackbar color="success" v-model="snackbar">{{text}}</v-snackbar>
         </v-card>
       </v-col>
 
@@ -67,7 +65,6 @@ import Vue from 'vue'
 import VueSession from 'vue-session'
 Vue.use(VueSession)
 
-// this part resolve an issue where the markers would not appear
 delete Icon.Default.prototype._getIconUrl
 
 Icon.Default.mergeOptions({
@@ -87,6 +84,7 @@ export default {
     return {
       participations_events: null,
       snackbar: false,
+      text: '',
 
       // Map
       zoom: 15,
@@ -116,8 +114,8 @@ export default {
             headers: headers
           })
           .then(function (response) {
-            console.log(response.data.auth)
             if (response.data.auth !== 'failed') {
+              self.text = 'Vous ne participez plus à cet évènement'
               self.snackbar = true
             }
           })
