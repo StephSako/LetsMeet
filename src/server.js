@@ -124,7 +124,7 @@ app.post('/connexion', function (req, res) {
           )
         }
       } else {
-        res.json({ auth: 'failed', error: 'Email incorrect' })
+        res.json({ auth: 'failed', error: 'Cet email n\'est pas enregistré' })
       }
     })
   })
