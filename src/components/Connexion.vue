@@ -63,7 +63,7 @@ export default {
         var headers = {
           'Content-Type': 'application/json'
         }
-        axios.post('/connexion', data, {
+        axios.post('/api/connexion', data, {
           headers: headers
         }).then(function (response) {
           if (response.data.auth !== 'failed') {

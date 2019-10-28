@@ -123,7 +123,7 @@ export default {
           'Content-Type': 'application/json'
         }
         axios
-          .post('/participate', data, {
+          .post('/api/participate', data, {
             headers: headers
           })
           .then(function (response) {})
@@ -141,7 +141,7 @@ export default {
     var self = this
 
     axios
-      .get('/events', { headers: headers })
+      .get('/api/events', { headers: headers })
       .then(function (response) {
         self.events = response.data
       })

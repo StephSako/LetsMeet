@@ -140,7 +140,7 @@ export default {
           dateCreation: dateNow
         }
         axios
-          .post('/add_event', data, { headers: headers })
+          .post('/api/add_event', data, { headers: headers })
           .then(function (response) {
             if (response.data.auth !== 'failed') {
               self.$router.push('/')

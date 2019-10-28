@@ -30,7 +30,7 @@ app.get('/api', function (req, res) {
   res.json({ status: 'Working' })
 })
 
-app.get('/events', function (req, res) {
+app.get('/api/events', function (req, res) {
   db.database.getConnection(function (err, connection) {
     if (err) {
       console.log(err.code)
@@ -44,7 +44,7 @@ app.get('/events', function (req, res) {
   })
 })
 
-app.post('/my_events', function (req, res) {
+app.post('/api/my_events', function (req, res) {
   var input = req.body
   var idUser = input.idSession
 
@@ -61,7 +61,7 @@ app.post('/my_events', function (req, res) {
   })
 })
 
-app.post('/my_participations', function (req, res) {
+app.post('/api/my_participations', function (req, res) {
   var input = req.body
   var idUser = input.idSession
 
@@ -78,7 +78,7 @@ app.post('/my_participations', function (req, res) {
   })
 })
 
-app.post('/connexion', function (req, res) {
+app.post('/api/connexion', function (req, res) {
   var input = req.body
   var email = input.email
   var password = input.password
@@ -123,7 +123,7 @@ app.post('/connexion', function (req, res) {
   })
 })
 
-app.post('/inscription', function (req, res) {
+app.post('/api/inscription', function (req, res) {
   var input = req.body
   var email = input.email
   var password = input.password
@@ -174,7 +174,7 @@ app.post('/inscription', function (req, res) {
   })
 })
 
-app.post('/add_event', function (req, res) {
+app.post('/api/add_event', function (req, res) {
   var input = req.body
   var titre = input.titre
   var resume = input.resume
@@ -237,7 +237,7 @@ app.post('/add_event', function (req, res) {
   })
 })
 
-app.post('/participate', function (req, res) {
+app.post('/api/participate', function (req, res) {
   var input = req.body
   var idUtilisateur = input.idSession
   var idEvenement = input.idEvent
@@ -274,7 +274,7 @@ app.post('/participate', function (req, res) {
   })
 })
 
-app.post('/update_event', function (req, res) {
+app.post('/api/update_event', function (req, res) {
   var input = req.body
   var titre = input.titre
   var resume = input.resume
@@ -320,7 +320,7 @@ app.post('/update_event', function (req, res) {
   })
 })
 
-app.post('/update_account', function (req, res) {
+app.post('/api/update_account', function (req, res) {
   var input = req.body
   var nom = input.nom
   var prenom = input.prenom
@@ -366,7 +366,7 @@ app.post('/update_account', function (req, res) {
   })
 })
 
-app.post('/get_account', function (req, res) {
+app.post('/api/get_account', function (req, res) {
   var input = req.body
   var idUser = input.idSession
 
@@ -405,7 +405,7 @@ app.post('/get_account', function (req, res) {
   })
 })
 
-app.post('/delete_event', function (req, res) {
+app.post('/api/delete_event', function (req, res) {
   var input = req.body
   var idEvent = input.idEvent
 
@@ -460,7 +460,7 @@ app.post('/delete_event', function (req, res) {
   })
 })
 
-app.post('/delete_participation', function (req, res) {
+app.post('/api/delete_participation', function (req, res) {
   var input = req.body
   var idEvent = input.idEvent
   var idUser = input.idSession
@@ -491,7 +491,7 @@ app.post('/delete_participation', function (req, res) {
   })
 })
 
-app.post('/update_password', function (req, res) {
+app.post('/api/update_password', function (req, res) {
   var input = req.body
   var idUser = input.idSession
   var actualPassword = input.actualPassword

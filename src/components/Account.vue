@@ -113,7 +113,7 @@ export default {
         idSession: this.$session.get('key')
       }
       axios
-        .post('/update_account', data, {
+        .post('/api/update_account', data, {
           headers: headers
         })
         .then(function (response) {
@@ -150,7 +150,7 @@ export default {
             idSession: this.$session.get('key')
           }
           axios
-            .post('/update_password', data, {
+            .post('/api/update_password', data, {
               headers: headers
             })
             .then(function (response) {
