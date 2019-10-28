@@ -54,7 +54,7 @@
       <v-col cols="12" md="6">
         <div class="map">
           <l-map :zoom="zoom" :center="center">
-            <l-tile-layer :url="url"></l-tile-layer>
+            <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
             <l-marker :lat-lng="marker"></l-marker>
           </l-map>
         </div>
@@ -100,10 +100,11 @@ export default {
       snackbar: false,
 
       // Map
-      zoom: 15,
+      zoom: 14,
       center: [48.973526, 2.201292],
       url: 'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-      marker: [48.973526, 2.201292]
+      marker: [48.973526, 2.201292],
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }
   },
   methods: {
