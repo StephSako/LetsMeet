@@ -40,22 +40,6 @@
                 label="Date de l'événement"
                 prepend-icon="mdi-calendar-range"
               />
-
-              <v-text-field
-                type="number"
-                step="0.0001"
-                v-model="latitude"
-                label="Latitude de l'événement"
-                prepend-icon="mdi-map-marker"
-              />
-
-              <v-text-field
-                type="number"
-                step="0.0001"
-                v-model="longitude"
-                label="Longitude de l'événement"
-                prepend-icon="mdi-map-marker"
-              />
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -69,10 +53,9 @@
 
       <v-col cols="12" md="6">
         <div class="map">
-          <l-map :zoom="zoom" :center="center">
-            <l-tile-layer :url="url"></l-tile-layer>
+          <l-map :zoom="zoom" :center="center" @click="addMarker">
+            <l-tile-layer :attribution="attribution" :url="url"></l-tile-layer>
             <l-marker :lat-lng="marker"></l-marker>
-            <v-geosearch :options="geosearchOptions"></v-geosearch>
           </l-map>
         </div>
         <v-snackbar color="success" v-model="snackbar">{{text}}</v-snackbar>
@@ -81,12 +64,14 @@
   </v-container>
 </template>
 
+<script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<script src="https://unpkg.com/vue2-leaflet@1.0.1/dist/vue2-leaflet.js"></script>
 <script>
 import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 import { Icon } from 'leaflet'
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { OpenStreetMapProvider } from 'leaflet-geosearch'
-import VGeosearch from 'vue2-leaflet-geosearch'
 import axios from 'axios'
 import Vue from 'vue'
 import VueSession from 'vue-session'
@@ -98,13 +83,13 @@ Icon.Default.mergeOptions({
   iconUrl: require('leaflet/dist/images/marker-icon.png'),
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 })
+
 export default {
   name: 'AddEvent',
   components: {
     LMap,
     LTileLayer,
-    LMarker,
-    VGeosearch
+    LMarker
   },
   data () {
     return {
@@ -112,31 +97,24 @@ export default {
       resume: '',
       adresse: '',
       dateEvent: '',
-      longitude: '',
-      latitude: '',
       text: '',
       snackbar: false,
       // Map
-      geosearchOptions: {
-        provider: new OpenStreetMapProvider()
-      },
       events: null,
-      zoom: 15,
-      center: [48.973526, 2.201292],
+      zoom: 5,
+      center: [46.227638, 2.213749],
       url: 'http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
-      marker: [48.973526, 2.201292]
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      marker: L.latLng(48.8534, 2.3488)
     }
   },
   methods: {
-    rmEvent (index) {
-      this.items.splice(index, 1)
-    },
     showMap (url) {
       this.url = url
     },
-    setMarker (latitude, longitude) {
-      this.marker = [latitude, longitude]
-      this.center = [latitude, longitude]
+    addMarker (event) {
+      this.marker = L.latLng(event.latlng.lat, event.latlng.lng)
+      console.log(this.marker.lat + ' ' + this.marker.lng)
     },
     sessionInLive () {
       return this.$session.exists()
@@ -156,8 +134,8 @@ export default {
           resume: this.resume,
           dateEvent: this.dateEvent,
           adresse: this.adresse,
-          latitude: this.latitude,
-          longitude: this.longitude,
+          latitude: this.marker.lat,
+          longitude: this.marker.lng,
           idSession: this.$session.get('key'),
           dateCreation: dateNow
         }
