@@ -158,6 +158,9 @@ export default {
               if (response.data.auth !== 'failed') {
                 self.text = 'Mot de passe mis à jour !'
                 self.snackbar = true
+                self.passOld = ''
+                self.pass1 = ''
+                self.pass2 = ''
               } else {
                 console.log('error')
                 this.text = 'Le mot de passe actuel est incorrect'
