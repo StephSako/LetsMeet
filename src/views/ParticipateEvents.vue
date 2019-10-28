@@ -34,7 +34,7 @@
 
                   <v-list-item-action>
                     <v-list-item-action-text>{{event.DateEvenement | formatDate}}</v-list-item-action-text>
-                    <v-icon color="error" @click="unparticipate(event.Id_EVENEMENT)">mdi-close-circle</v-icon>
+                    <v-icon color="error" @click="unparticipate(event.Id_EVENEMENT, event)">mdi-close-circle</v-icon>
                     <v-snackbar color="success" v-model="snackbar">
                       Vous ne participez plus à cet évènement
                     </v-snackbar>
@@ -100,7 +100,7 @@ export default {
       this.marker = [latitude, longitude]
       this.center = [latitude, longitude]
     },
-    unparticipate (idEvent) {
+    unparticipate (idEvent, event) {
       var self = this
       if (this.$session.exists()) {
         var data = {
@@ -124,6 +124,9 @@ export default {
           .catch(function (error) {
             console.log(error)
           })
+
+        var index = this.participations_events.indexOf(event)
+        this.participations_events.splice(index, 1)
       }
     },
     sessionInLive () {

@@ -39,21 +39,35 @@
             </v-card>
 
             <v-card class="pa-3 ma-5" tile justify="end">
-              <v-text-field label="Mot de passe actuel" type="password" v-model="passOld" required></v-text-field>
+              <v-text-field label="Mot de passe actuel"
+                type="password"
+                v-model="passOld"
+                required>
+              </v-text-field>
 
-              <v-text-field label="Nouveau mot de passe" type="password" v-model="pass1" required></v-text-field>
+              <v-text-field
+                label="Nouveau mot de passe"
+                type="password"
+                v-model="pass1"
+                required>
+              </v-text-field>
 
               <v-text-field
                 label="Nouveau mot de passe (verification)"
                 type="password"
                 v-model="pass2"
-                required
-              ></v-text-field>
+                required>
+              </v-text-field>
 
               <v-divider></v-divider>
 
               <v-row justify="center">
-                <v-btn depressed large color="primary" class="ma-5">Changer le mot de passe</v-btn>
+                <v-btn
+                  depressed
+                  large
+                  color="primary"
+                  class="ma-5"
+                  @click="updatePassword()">Changer le mot de passe</v-btn>
               </v-row>
             </v-card>
           </v-flex>
@@ -86,12 +100,6 @@ export default {
     }
   }),
   methods: {
-    checkForm: function (e) {
-      if (this.pass.equals(this.pass2) && this.pass1.length() > 5) {
-        this.valid = true
-      }
-      e.preventDefault()
-    },
     updateAccount () {
       var self = this
       var headers = {
@@ -125,6 +133,48 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    updatePassword () {
+      if (this.pass1 !== null && this.pass2 !== null && this.pass1 !== '' && this.pass1 !== '') {
+        if (this.pass1 !== this.pass2) {
+          this.text = 'Les mots de passe sont différents'
+          this.snackbar = true
+        } else {
+          var self = this
+          var headers = {
+            'Content-Type': 'application/json'
+          }
+          var data = {
+            actualPassword: this.passOld,
+            newPassword: this.pass1,
+            idSession: this.$session.get('key')
+          }
+          axios
+            .post('http://localhost:4000/update_password', data, {
+              headers: headers
+            })
+            .then(function (response) {
+              console.log(response.data.auth)
+              if (response.data.auth !== 'failed') {
+                self.text = 'Mot de passe mis à jour !'
+                self.snackbar = true
+                self.passOld = ''
+                self.pass1 = ''
+                self.pass2 = ''
+              } else {
+                console.log('error')
+                this.text = 'Le mot de passe actuel est incorrect'
+                this.snackbar = true
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+            })
+        }
+      } else {
+        this.text = 'Les mots de passe sont vides'
+        this.snackbar = true
+      }
     },
     sessionInLive () {
       return this.$session.exists()

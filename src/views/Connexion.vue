@@ -28,6 +28,8 @@
                 <v-spacer></v-spacer>
                 <v-btn color="info"><router-link to="/inscription">Inscription</router-link></v-btn>
             </v-card-actions>
+
+            <v-snackbar color="error" v-model="snackbar">{{text}}</v-snackbar>
         </v-card>
     </v-app>
 </template>
@@ -46,7 +48,9 @@ export default {
     prenom: '',
     nom: '',
     imageProfil: '',
-    password: ''
+    password: '',
+    snackbar: false,
+    text: ''
   }),
   methods: {
     connexion () {
@@ -70,6 +74,9 @@ export default {
             self.$session.set('key', response.data.key)
             self.$session.set('imageProfil', response.data.imageProfil)
             self.$router.push('/')
+          } else {
+            self.snackbar = true
+            self.text = response.data.error
           }
         }).catch(function (error) {
           console.log(error)
