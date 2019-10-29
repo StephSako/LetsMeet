@@ -43,6 +43,9 @@
                 <v-spacer></v-spacer>
                 <v-btn color="info"><router-link to="/connexion">Connexion</router-link></v-btn>
             </v-card-actions>
+
+            <v-snackbar color="error" v-model="snackbar">{{text}}</v-snackbar>
+
         </v-card>
     </v-app>
 </template>
@@ -61,12 +64,14 @@ export default {
     prenom: '',
     nom: '',
     password: '',
-    imageProfil: ''
+    imageProfil: '',
+    snackbar: false,
+    text: ''
   }),
   methods: {
     inscription () {
       var self = this
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate() && this.email !== null && this.password !== null && this.prenom !== null && this.nom !== null && this.email !== '' && this.password !== '' && this.prenom !== '' && this.nom !== '') {
         var data = {
           email: this.email,
           password: this.password,
@@ -91,6 +96,9 @@ export default {
         }).catch(function (error) {
           console.log(error)
         })
+      } else {
+        this.text = 'Vous devez saisir votre nom, prénom, email et mot de passe pour vous inscrire'
+        this.snackbar = true
       }
     }
   }
