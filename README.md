@@ -38,7 +38,7 @@ La chips dans la NavBar permet d'accéder au compte de l'utilisateur connecté e
 
 Ce menu permet d'accéder à la page listant tous les événements créés par l'utilisateur.
 
-<img src="https://image.noelshack.com/fichiers/2019/44/2/1572358886-my-events.png" width="100%">
+<img src="https://image.noelshack.com/fichiers/2019/44/2/1572359958-my-events.png" width="100%">
 
 Il est alors possible de modifier et supprimer ses évènements.
 
