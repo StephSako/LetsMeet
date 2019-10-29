@@ -42,7 +42,7 @@ Ce menu permet d'accéder à la page listant tous les événements créés par l
 
 Il est alors possible de modifier et supprimer ses évènements.
 
-<img src="https://image.noelshack.com/fichiers/2019/44/2/1572358760-my-events-modif.png" width="100%">
+<img src="https://image.noelshack.com/fichiers/2019/44/2/1572360020-my-events-modif.png" width="100%">
 
 ### Mes participations
 
