@@ -23,14 +23,14 @@ Il suffit d'être inscrit et connecté pour pouvoir participer aux événements.
 <br><br>
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358010-inscription.png" width="100%">
 
-### Participer à un évènement
+### Participer à un événement
 Une fois connecté, l'utilisateur peut participer aux événements de son choix.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358121-participe.png" width="100%">
 
 ### Compte
 
-La chips dans la NavBar permet d'accéder au compte de l'utilisateur connecté et de modifier ses informations personnels ainsi que son mot de passe
+La chips dans la NavBar permet d'accéder au compte de l'utilisateur connecté et de modifier ses informations personnelles ainsi que son mot de passe.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358266-compte.png" width="100%">
 
@@ -40,7 +40,7 @@ Ce menu permet d'accéder à la page listant tous les événements créés par l
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572359958-my-events.png" width="100%">
 
-Il est alors possible de modifier et supprimer ses évènements.
+Il est alors possible de modifier et supprimer ses événements.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572360020-my-events-modif.png" width="100%">
 
@@ -59,7 +59,7 @@ Il faut alors renseigner le titre, la description, l'adresse / le lieu, la date 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572359340-create.png" width="100%">
 
 #### Déconnexion
-Enfin, le dernier icône nous permet de nous déconnecter et nous ramène à la page principale.
+Enfin, la dernière icône nous permet de nous déconnecter et nous ramène à la page principale.
 
 ## Technologies utilisées
 - <a href="https://vuejs.org/">VueJS</a>
