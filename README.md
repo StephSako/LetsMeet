@@ -66,6 +66,43 @@ Enfin, la dernière icône nous permet de nous déconnecter et nous ramène à l
 - <a href="https://vuetifyjs.com/">Vuetify</a>
 - <a href="https://nodejs.org/en/">NodeJS</a>
 - <a href="https://github.com/KoRiGaN/Vue2Leaflet">vue2-leaflet</a> et <a href="https://leafletjs.com/">leaflet</a> pour l'affichage de la Map
+- Etant donné que nous avions déjà une bonne expérience avec MySQl et phpmyadmin, nous avons héberger une base de données sur l'herbergeur Web <a href="https://www.alwaysdata.com/fr/">AlwaysData</a>. Voici la structure des tables :
+
+### EVENEMENT
+| Colonne           | Type    | Nullable |
+|:-----------------:|:-------:|:--------:|
+| Id_EVENEMENT (PK) | integer | Non      |
+| Titre             | varchar | Non      |
+| Resume            | text    | Oui      |
+| DateEvenement     | date    | Non      |
+| Adresse           | varchar | Oui      |
+| Longitude         | float   | Non      |
+| Latitude          | float   | Non      |
+
+### UTILISATEUR
+| Colonne             | Type    | Nullable |
+|:-------------------:|:-------:|:--------:|
+| Id_UTILISATEUR (PK) | integer | Non      |
+| Prenom              | varchar | Non      |
+| Nom                 | varchar | Non      |
+| Password            | varchar | Non      |
+| Email               | varchar | Non      |
+| ImageProfil         | text    | Oui      |
+
+### POST
+| Colonne             | Type    | Nullable |
+|:-------------------:|:-------:|:--------:|
+| Id             (PK) | integer | Non      |
+| Id_UTILISATEUR (FK) | integer | Non      |
+| Id_EVENEMENT   (FK) | integer | Non      |
+| DateCreation        | date    | Non      |
+
+### POST
+| Colonne             | Type    | Nullable |
+|:-------------------:|:-------:|:--------:|
+| Id             (PK) | integer | Non      |
+| Id_UTILISATEUR (FK) | integer | Non      |
+| Id_EVENEMENT   (FK) | integer | Non      |
 
 ## Difficultés rencontrées
 * Les plus grandes difficultés pour nous ont été l'affichage et l’interaction avec le composant Map de <a href="https://github.com/KoRiGaN/Vue2Leaflet">vue2-leaflet</a> en raison de peu de documentation.
