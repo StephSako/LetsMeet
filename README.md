@@ -66,7 +66,7 @@ Enfin, la dernière icône nous permet de nous déconnecter et nous ramène à l
 - <a href="https://vuetifyjs.com/">Vuetify</a>
 - <a href="https://nodejs.org/en/">NodeJS</a>
 - <a href="https://github.com/KoRiGaN/Vue2Leaflet">vue2-leaflet</a> et <a href="https://leafletjs.com/">leaflet</a> pour l'affichage de la Map
-- Etant donné que nous avions déjà une bonne expérience avec MySQl et phpmyadmin, nous avons héberger une base de données sur l'herbergeur Web <a href="https://www.alwaysdata.com/fr/">AlwaysData</a>. Voici la structure des tables :
+- Etant donné que nous avions déjà une bonne expérience avec MySQL et phpmyadmin, nous avons hébergé une base de données sur <a href="https://www.alwaysdata.com/fr/">AlwaysData</a>. Voici la structure des tables :
 
 ### EVENEMENT
 | Colonne           | Type    | Nullable |
