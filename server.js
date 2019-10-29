@@ -53,7 +53,7 @@ app.post('/api/my_events', function (req, res) {
       console.log(err.code)
       throw err
     }
-    connection.query('SELECT * FROM EVENEMENT NATURAL JOIN POST NATURAL JOIN UTILISATEUR WHERE Id_UTILISATEUR = ? ORDER BY EVENEMENT.DateEvenement', [idUser], function (err, results, fields) {
+    connection.query('SELECT Titre, DateEvenement, Id_EVENEMENT, Adresse, Resume, (SELECT GROUP_CONCAT(Prenom, \' \' , Nom))  AS Participants , Longitude, Latitude FROM UTILISATEUR NATURAL JOIN PARTICIPE NATURAL JOIN EVENEMENT WHERE Id_EVENEMENT IN (SELECT Id_EVENEMENT FROM POST NATURAL JOIN EVENEMENT WHERE Id_Utilisateur = ?) GROUP BY Id_EVENEMENT ORDER BY DateEvenement', [idUser], function (err, results, fields) {
       connection.release()
       if (err) console.log('Error request my_events')
       res.json(results)

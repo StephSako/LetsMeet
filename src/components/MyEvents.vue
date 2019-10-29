@@ -29,8 +29,7 @@
                     <v-list-item-title v-text="'Résumé : ' + event.Resume"></v-list-item-title>
                     <v-list-item-title>Date : {{event.DateEvenement | formatDate}}</v-list-item-title>
                     <v-list-item-title v-text="'Adresse : ' + event.Adresse"></v-list-item-title>
-                    <v-list-item-title v-text="'Latitude : ' + event.Latitude"></v-list-item-title>
-                    <v-list-item-title v-text="'Longitude : ' + event.Longitude"></v-list-item-title>
+                    <v-list-item-title v-text="'Participants : ' + event.Participants"></v-list-item-title>
                   </v-list-item-content>
 
                   <v-list-item-action>
