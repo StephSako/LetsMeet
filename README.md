@@ -23,14 +23,14 @@ Il suffit d'être inscrit et connecté pour pouvoir participer aux événements.
 <br><br>
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358010-inscription.png" width="100%">
 
-### Participer à un évènement
+### Participer à un événement
 Une fois connecté, l'utilisateur peut participer aux événements de son choix.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358121-participe.png" width="100%">
 
 ### Compte
 
-La chips dans la NavBar permet d'accéder au compte de l'utilisateur connecté et de modifier ses informations personnels ainsi que son mot de passe
+La chips dans la NavBar permet d'accéder au compte de l'utilisateur connecté et de modifier ses informations personnelles ainsi que son mot de passe.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358266-compte.png" width="100%">
 
@@ -40,7 +40,7 @@ Ce menu permet d'accéder à la page listant tous les événements créés par l
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572359958-my-events.png" width="100%">
 
-Il est alors possible de modifier et supprimer ses évènements.
+Il est alors possible de modifier et supprimer ses événements.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572360020-my-events-modif.png" width="100%">
 
@@ -59,13 +59,50 @@ Il faut alors renseigner le titre, la description, l'adresse / le lieu, la date 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572359340-create.png" width="100%">
 
 #### Déconnexion
-Enfin, le dernier icône nous permet de nous déconnecter et nous ramène à la page principale.
+Enfin, la dernière icône nous permet de nous déconnecter et nous ramène à la page principale.
 
 ## Technologies utilisées
 - <a href="https://vuejs.org/">VueJS</a>
 - <a href="https://vuetifyjs.com/">Vuetify</a>
 - <a href="https://nodejs.org/en/">NodeJS</a>
 - <a href="https://github.com/KoRiGaN/Vue2Leaflet">vue2-leaflet</a> et <a href="https://leafletjs.com/">leaflet</a> pour l'affichage de la Map
+- Etant donné que nous avions déjà une bonne expérience avec MySQl et phpmyadmin, nous avons héberger une base de données sur l'herbergeur Web <a href="https://www.alwaysdata.com/fr/">AlwaysData</a>. Voici la structure des tables :
+
+### EVENEMENT
+| Colonne           | Type    | Nullable |
+|:-----------------:|:-------:|:--------:|
+| Id_EVENEMENT (PK) | integer | Non      |
+| Titre             | varchar | Non      |
+| Resume            | text    | Oui      |
+| DateEvenement     | date    | Non      |
+| Adresse           | varchar | Oui      |
+| Longitude         | float   | Non      |
+| Latitude          | float   | Non      |
+
+### UTILISATEUR
+| Colonne             | Type    | Nullable |
+|:-------------------:|:-------:|:--------:|
+| Id_UTILISATEUR (PK) | integer | Non      |
+| Prenom              | varchar | Non      |
+| Nom                 | varchar | Non      |
+| Password            | varchar | Non      |
+| Email               | varchar | Non      |
+| ImageProfil         | text    | Oui      |
+
+### POST
+| Colonne             | Type    | Nullable |
+|:-------------------:|:-------:|:--------:|
+| Id             (PK) | integer | Non      |
+| Id_UTILISATEUR (FK) | integer | Non      |
+| Id_EVENEMENT   (FK) | integer | Non      |
+| DateCreation        | date    | Non      |
+
+### PARTICIPE
+| Colonne             | Type    | Nullable |
+|:-------------------:|:-------:|:--------:|
+| Id             (PK) | integer | Non      |
+| Id_UTILISATEUR (FK) | integer | Non      |
+| Id_EVENEMENT   (FK) | integer | Non      |
 
 ## Difficultés rencontrées
 * Les plus grandes difficultés pour nous ont été l'affichage et l’interaction avec le composant Map de <a href="https://github.com/KoRiGaN/Vue2Leaflet">vue2-leaflet</a> en raison de peu de documentation.
