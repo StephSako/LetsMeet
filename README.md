@@ -97,7 +97,7 @@ Enfin, la dernière icône nous permet de nous déconnecter et nous ramène à l
 | Id_EVENEMENT   (FK) | integer | Non      |
 | DateCreation        | date    | Non      |
 
-### POST
+### PARTICIPE
 | Colonne             | Type    | Nullable |
 |:-------------------:|:-------:|:--------:|
 | Id             (PK) | integer | Non      |
