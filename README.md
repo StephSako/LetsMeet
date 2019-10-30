@@ -18,7 +18,7 @@ ses événements créés.<br>
 Certaines fonctionnalités du site sont accessibles en mode hors-connecté,
 comme lister les événements et les visualiser sur la Map, mais il faut se
 connecter pour accéder à son compte, créer un événement, lister ceux qu’on a
-créer et lister ses participations.
+créés et lister ses participations.
 <br><br>
 *CRUD* est donc bien respecté:
 - **Create** : création d’événements ;
@@ -35,7 +35,7 @@ Nous pouvons nous connecter et nous inscrire depuis cette page.
 <p align="center"><img src="https://image.noelshack.com/fichiers/2019/44/2/1572355304-home-convertimage.png" width="100%"></p>
 
 Une fois connecté, les boutons pour participer aux événements apparaissent
-alors dans la liste. Il est alors maintenant possible d’accéder à notre compte,
+alors dans la liste. Il est alors possible d’accéder à notre compte,
 au listing de nos événements et nos participations, et de nous déconnecter.
 
 <img src="https://image.noelshack.com/fichiers/2019/44/2/1572358121-participe.png" width="100%">
@@ -112,7 +112,7 @@ Voici le schéma relationnel de la base de données :
 
 ## Difficultés rencontrées
 * Les plus grandes difficultés pour nous ont été l'affichage et l’interaction
-avec le composant Map de vue2-leaflet en raison de peu de
+avec le composant Map de vue2-leaflet en raison du peu de
 documentation.
 * Nous n’avons pas réussi à mettre en évidence le fait que l’utilisateur ait
 déjà participé à des événements dans la liste de la page principale.
