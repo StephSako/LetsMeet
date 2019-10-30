@@ -40,9 +40,7 @@
                       @click="participate(event.Id_EVENEMENT)">Participer
                     </v-btn>
 
-                    <v-snackbar color="success" v-model="snackbar">
-                      Vous participez maintenant à cet évènement
-                    </v-snackbar>
+                    <v-snackbar color="success" v-model="snackbar">{{text}}</v-snackbar>
                   </v-list-item-action>
                 </v-list-item>
               </template>
@@ -98,6 +96,7 @@ export default {
     return {
       events: null,
       snackbar: false,
+      text: '',
 
       // Map
       zoom: 14,
@@ -114,7 +113,6 @@ export default {
     },
     participate (idEvent) {
       if (this.$session.exists()) {
-        this.snackbar = true
         var data = {
           idEvent: idEvent,
           idSession: this.$session.get('key')
@@ -126,7 +124,15 @@ export default {
           .post('/api/participate', data, {
             headers: headers
           })
-          .then(function (response) {})
+          .then(function (response) {
+            if (response.data.auth !== 'failed') {
+              self.snackbar = true
+              self.text = 'Vous participez maintenant à cet événement'
+            } else {
+              self.snackbar = true
+              self.text = response.data.error
+            }
+          })
           .catch(function (error) {
             console.log(error)
           })

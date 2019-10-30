@@ -255,25 +255,38 @@ app.post('/api/participate', function (req, res) {
       throw err
     }
 
-    var participe = {
-      Id_UTILISATEUR: idUtilisateur,
-      Id_EVENEMENT: idEvenement
-    }
+    connection.query('SELECT * FROM PARTICIPE WHERE Id_EVENEMENT = ? AND Id_UTILISATEUR  = ?', [idEvenement, idUtilisateur], function (error, results, fields) {
+      if (error) throw error
+      if (results.length === 0) {
+        var participe = {
+          Id_UTILISATEUR: idUtilisateur,
+          Id_EVENEMENT: idEvenement
+        }
 
-    connection.query('INSERT INTO PARTICIPE SET ?', participe, function (error, results, fields) {
-      connection.release()
-      if (error) {
+        connection.query('INSERT INTO PARTICIPE SET ?', participe, function (error, results, fields) {
+          connection.release()
+          if (error) {
+            console.log(error)
+            res.json(
+              {
+                auth: 'failed',
+                error: 'La participation a échoué'
+              }
+            )
+          } else {
+            res.json(
+              {
+                auth: 'success'
+              }
+            )
+          }
+        })
+      } else {
         console.log(error)
         res.json(
           {
             auth: 'failed',
-            error: 'La participation a échoué'
-          }
-        )
-      } else {
-        res.json(
-          {
-            auth: 'success'
+            error: 'Vous participez déjà à cet événement'
           }
         )
       }
