@@ -92,6 +92,9 @@ export default {
             self.$session.set('nom', self.nom)
             self.$session.set('imageProfil', self.imageProfil)
             self.$router.push('/')
+          } else {
+            self.snackbar = true
+            self.text = response.data.error
           }
         }).catch(function (error) {
           console.log(error)

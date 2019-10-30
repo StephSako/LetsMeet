@@ -137,38 +137,45 @@ app.post('/api/inscription', function (req, res) {
       throw err
     }
 
-    var utilisateur = {
-      Email: email,
-      Password: password,
-      Prenom: prenom,
-      Nom: nom,
-      ImageProfil: imageProfil
-    }
+    connection.query('SELECT * FROM UTILISATEUR WHERE Email = ?', [email], function (error, results, fields) {
+      if (error) throw error
+      if (results.length === 0) {
+        var utilisateur = {
+          Email: email,
+          Password: password,
+          Prenom: prenom,
+          Nom: nom,
+          ImageProfil: imageProfil
+        }
 
-    connection.query('INSERT INTO UTILISATEUR SET ?', utilisateur, function (error, results, fields) {
-      connection.release()
-      if (error) {
-        res.json(
-          {
-            auth: 'failed',
-            error: 'L\'inscription a échoué'
+        connection.query('INSERT INTO UTILISATEUR SET ?', utilisateur, function (error, results, fields) {
+          connection.release()
+          if (error) {
+            res.json(
+              {
+                auth: 'failed',
+                error: 'L\'inscription a échoué'
+              }
+            )
+          } else {
+            req.session.key = results.insertId
+            req.session.email = email
+            req.session.nom = nom
+            req.session.prenom = prenom
+            req.session.imageProfil = imageProfil
+            res.json(
+              {
+                auth: 'success',
+                key: req.session.key,
+                prenom: req.session.prenom,
+                nom: req.session.nom,
+                imageProfil: req.session.imageProfil
+              }
+            )
           }
-        )
+        })
       } else {
-        req.session.key = results.insertId
-        req.session.email = email
-        req.session.nom = nom
-        req.session.prenom = prenom
-        req.session.imageProfil = imageProfil
-        res.json(
-          {
-            auth: 'success',
-            key: req.session.key,
-            prenom: req.session.prenom,
-            nom: req.session.nom,
-            imageProfil: req.session.imageProfil
-          }
-        )
+        res.json({ auth: 'failed', error: 'Cet email est déjà pris' })
       }
     })
   })

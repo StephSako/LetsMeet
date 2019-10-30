@@ -55,7 +55,7 @@ export default {
   methods: {
     connexion () {
       var self = this
-      if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate() && this.email !== null && this.password !== null && this.email !== '' && this.password !== '') {
         var data = {
           email: this.email,
           password: this.password
@@ -81,6 +81,9 @@ export default {
         }).catch(function (error) {
           console.log(error)
         })
+      } else {
+        this.text = 'Vous devez saisir votre email et mot de passe'
+        this.snackbar = true
       }
     }
   }
