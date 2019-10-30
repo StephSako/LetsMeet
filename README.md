@@ -111,8 +111,8 @@ Voici le schéma relationnel de la base de données :
 <img src="https://image.noelshack.com/fichiers/2019/44/3/1572438260-sr-letsmeet.png" width="100%">
 
 ## Difficultés rencontrées
-* Les plus grandes difficultés pour nous ont été l'affichage et l’interaction
-avec le composant Map de vue2-leaflet en raison du peu de
-documentation.
-* Nous n’avons pas réussi à mettre en évidence le fait que l’utilisateur ait
-déjà participé à des événements dans la liste de la page principale.
+* Les plus grandes difficultés pour nous ont été l'affichage et l’interaction avec le composant Map de vue2-leaflet en raison du peu de documentation.   
+* Comptes, Mes événements et Mes participations crashent en mode production sur glitch.com, uniquement lors d’un rafraîchissement de type CTRL+F5 de la page, alors que cela ne se produit pas en développement.
+
+## Fonctionnalités prévues non implémentées
+* Nous n’avons pas réussi à mettre en évidence le fait qu’un utilisateur ait déjà participé à un événement, lorsqu’il clique sur le bouton « Participer » dans la liste de la page principale, par un changement de design de ce bouton, bien qu’un message d’erreur apparaisse.
