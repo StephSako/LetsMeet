@@ -113,6 +113,7 @@ export default {
       this.center = [latitude, longitude]
     },
     participate (idEvent) {
+      var self = this
       if (this.$session.exists()) {
         var data = {
           idEvent: idEvent,
