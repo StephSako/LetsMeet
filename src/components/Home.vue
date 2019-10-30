@@ -41,6 +41,7 @@
                     </v-btn>
 
                     <v-snackbar color="success" v-model="snackbar">{{text}}</v-snackbar>
+
                   </v-list-item-action>
                 </v-list-item>
               </template>
@@ -126,11 +127,11 @@ export default {
           })
           .then(function (response) {
             if (response.data.auth !== 'failed') {
-              self.snackbar = true
               self.text = 'Vous participez maintenant à cet événement'
-            } else {
               self.snackbar = true
+            } else {
               self.text = response.data.error
+              self.snackbar = true
             }
           })
           .catch(function (error) {
