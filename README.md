@@ -25,7 +25,7 @@ créés et lister ses participations.
 - **Read** : liste de ses propres événements et participations ;
 - **Update** : modifications des données relatives à son compte ainsi que ceux de
 ses événements ;
-- Delete : suppression de ses événements et de ses participations.
+- **Delete** : suppression de ses événements et de ses participations.
 
 ### Page principale
 La page principale liste tous les événements chronologiquement créés. Il suffit
